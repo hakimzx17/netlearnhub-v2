@@ -96,7 +96,7 @@ CLI is simulated — a command interpreter that matches input against expected s
 ### 4. Quiz System
 
 **Lesson Quiz:** 10 questions, 80% pass threshold
-**Domain Exam:** 30 questions, pulled from completed lessons in that domain only, 80% pass threshold
+**Domain Exam:** 30 questions, pulled from completed lessons in that domain only
 
 **Adaptive Difficulty:**
 - Question pool tagged: Easy / Medium / Hard
@@ -136,8 +136,8 @@ Each Vault entry is a card. Filterable by category and domain. Searchable.
 - Organized by the 6 CCNA domains
 - Rating system: **Know It** / **Unsure** / **Don't Know**
 - Review scheduling:
-  - Know It → next review in 10 min → next review 1 day
-  - Unsure → next review in 1 min
+  - Know It → next review in 3 days
+  - Unsure → next review in 1 day
   - Don't Know → re-queued in current session immediately
 - Due cards surfaced on dashboard
 - Smooth card flip animation (3D CSS flip)
@@ -505,7 +505,7 @@ Profile page → "Admin Privileges" button (subtle, not prominent) → password 
 | Content | **MDX via @mdx-js/react + Vite MDX plugin** | Lesson content in MDX with custom React components |
 | Icons | **Lucide React** | Clean, consistent, maintainable |
 | Charts/Data Viz | **Recharts** | Exam history score trend, domain radar chart on results screen |
-| Font | **Display: Syne / Body: DM Sans** | Loaded via Google Fonts or self-hosted; Syne is distinctive and technical-feeling; DM Sans is clean and readable |
+| Font | **Outfit (300/400/500/600/700)** | Single-family system — matches the approved theme exactly. Loaded via Google Fonts. Geometric, clean, technical. Weights 600/700 for headings, 400/500 for body, 300 for muted labels |
 | UI Primitives | **Radix UI** | Accessible, unstyled, composable (modals, dropdowns, tooltips) |
 | Code/CLI Display | **xterm.js** | Real terminal emulator feel for CLI labs and exam lab questions |
 
@@ -541,8 +541,8 @@ src/
 │   └── profile/
 │       └── index.tsx
 ├── layouts/
-│   ├── AppLayout.tsx          → Sidebar + topbar shell (hidden in exam session)
-│   └── ExamLayout.tsx         → Full-screen, nav-less exam shell
+│   ├── AppLayout.tsx          → Sidebar (80px→320px hover) + optional topbar. Used by ALL routes except exam session
+│   └── ExamLayout.tsx         → Completely nav-free full-screen shell. Sidebar entirely absent. Used by /exam/session only
 ```
 
 ---
@@ -668,56 +668,311 @@ Ephemeral. Tracks current lab session state (current step, command history, phas
 
 ## Design System Direction
 
-**Theme: Premium Dark Technical**
-- Not hacker. Not sterile. Technical luxury — the kind of UI a senior engineer would be proud to use.
+**Theme: Neon Orbit — Emerald Dark**
+Derived directly from the approved theme file. Every value below is canonical — do not deviate without explicit approval.
 
-**Colors:**
+**CSS Variables (globals.css — single source of truth):**
 ```css
---bg-base: #0d0f14;           /* Near-black with blue undertone */
---bg-surface: #13161e;        /* Card/panel surface */
---bg-elevated: #1a1e2a;       /* Elevated panel / modal */
---border: #232736;            /* Subtle borders */
---text-primary: #e8eaf2;      /* Main text */
---text-secondary: #8891aa;    /* Muted text */
---accent-blue: #4f8ef7;       /* Primary accent — electric blue */
---accent-teal: #22d3c8;       /* Secondary accent — simulation/lab */
---accent-amber: #f59e0b;      /* Warning / attention */
---accent-green: #22c55e;      /* Success / pass */
---accent-red: #ef4444;        /* Error / fail */
---accent-purple: #a78bfa;     /* Flashcard domain color */
+:root {
+  --bg:             #0d1117;                        /* Page background */
+  --surface:        rgba(13, 17, 23, 0.7);          /* Glass card background */
+  --surface-solid:  #161b22;                        /* Non-glass surfaces (sidebar, dropdowns) */
+  --text:           #c9d1d9;                        /* Primary text */
+  --muted:          #8b949e;                        /* Secondary / label text */
+  --accent:         #00c896;                        /* Primary accent — emerald green */
+  --border:         rgba(48, 54, 61, 0.8);          /* Subtle borders */
+  --glow:           #00c89633;                      /* Accent glow (box-shadow, inset glow) */
+
+  /* Semantic additions beyond the base theme */
+  --accent-amber:   #f59e0b;                        /* Warning / timer threshold */
+  --accent-red:     #ef4444;                        /* Error / fail / timer critical */
+  --accent-purple:  #a78bfa;                        /* Flashcard accent */
+  --mono:           'JetBrains Mono', monospace;    /* CLI / code blocks */
+}
+```
+
+**Background treatment:**
+```css
+body {
+  background: var(--bg);
+  background-image: radial-gradient(
+    circle at 50% 0%,
+    rgba(59, 130, 246, 0.08) 0%,
+    var(--bg) 70%
+  );
+  /* Subtle blue bloom at top — present on every page */
+}
 ```
 
 **Typography:**
-- Display/Headings: `Syne` (700, 800) — distinctive, geometric, technical
-- Body: `DM Sans` (400, 500) — readable, modern, approachable
-- Mono/CLI: `JetBrains Mono` — terminal and code blocks
+- All text: `Outfit` (Google Fonts) — weights 300 / 400 / 500 / 600 / 700
+- Headings: weight 700, `var(--text)`
+- Body: weight 400–500, `var(--text)`
+- Labels / section titles: weight 400–500, `var(--muted)`, `font-size: 10–12px`, `letter-spacing: 2px`, `text-transform: uppercase`
+- Mono / CLI: `JetBrains Mono` — terminal panels, code blocks, command output only
+
+**Glass morphism pattern (applied to all floating cards/widgets):**
+```css
+.glass-widget {
+  background: var(--surface);           /* rgba(13,17,23,0.7) */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px;
+}
+/* Accent-highlighted variant (e.g. "Resume Lesson" card): */
+.glass-widget.accent {
+  border-color: var(--accent);
+  background: rgba(0, 200, 150, 0.05);  /* #00c8960D */
+}
+```
+
+**Glow / accent effects:**
+```css
+/* Active state glow on rings, dots, progress bars */
+box-shadow: 0 0 10px var(--glow);
+
+/* Inset + outset glow on orbit ring and centerpiece containers */
+box-shadow: inset 0 0 60px var(--glow), 0 0 60px var(--glow);
+
+/* Progress bars always carry a trailing glow */
+.progress-fill {
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+```
+
+**Border radius scale:**
+- `8px` — small UI elements (nav buttons, tags, badges)
+- `12px` — dropdown menus, tooltips
+- `20px` — glass widgets / cards (canonical card radius)
+- `100px` — pill shapes (buttons, top navigation bar, CTA buttons)
+- `50%` — circular elements (avatar, domain dots, orbit ring)
 
 **Spacing:** 4px base unit. Tailwind default scale.
 
-**Border radius:** `rounded-lg` (8px) for cards, `rounded-xl` (12px) for modals. Sharp, not bubbly.
-
-**Shadows:** Dark ambient shadows, blue-tinted glow on active/hover states.
+**Sidebar spec (canonical):**
 ```css
---shadow-glow: 0 0 20px rgba(79, 142, 247, 0.15);
+.sidebar {
+  width: 80px;                          /* Collapsed default */
+  transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid var(--border);
+}
+.sidebar:hover {
+  width: 320px;
+  box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+}
+/* All text labels inside sidebar: opacity 0 collapsed, opacity 1 on hover */
+.sidebar-label {
+  opacity: 0;
+  transition: opacity 0.3s;
+  transition-delay: 0.1s;              /* Slight delay prevents flash during expand */
+}
+.sidebar:hover .sidebar-label { opacity: 1; }
+```
+- Sidebar is present on all screens **except** `/exam/session` (ExamLayout)
+- Sidebar expands on hover — no click/toggle needed
+- Domain list uses a vertical connector line (`::before` pseudo, `left: 39px`) with dot nodes
+- Active domain dot: `background: var(--accent)`, `box-shadow: 0 0 10px var(--accent)`, double-ring `::after` at 50% opacity
+- Locked domain dot: `background: var(--surface-solid)`, `border: 2px solid var(--border)`
+
+**Top navigation bar (floating pill — Dashboard only):**
+```css
+.top-nav {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(13, 17, 23, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 8px 16px;
+  display: flex;
+  gap: 10px;
+}
+.nav-btn {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  border-radius: 100px;
+  padding: 10px 20px;
+  font-family: 'Outfit';
+  font-weight: 500;
+  font-size: 14px;
+}
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--accent);
+}
+```
+
+**Dashboard orbit centerpiece:**
+```css
+.orbit-container {
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  box-shadow: inset 0 0 60px var(--glow), 0 0 60px var(--glow);
+}
+.orbit-ring {
+  width: 380px; height: 380px;
+  border-radius: 50%;
+  border: 1px dashed var(--accent);
+  animation: spin 60s linear infinite;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.orbit-percent {
+  font-size: 110px;
+  font-weight: 700;
+  color: var(--accent);
+  text-shadow: 0 0 20px var(--glow);
+}
+```
+
+**Lightning progress track (Domain Progression widget):**
+```css
+.lightning-track {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.lightning-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  border-radius: 2px;
+}
+.track-node { width: 16px; height: 16px; border-radius: 50%; z-index: 2; }
+.track-node.completed { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.track-node.active { border-color: var(--accent); box-shadow: 0 0 10px var(--accent); }
+```
+
+**CTA button (primary):**
+```css
+.btn-primary {
+  background: rgba(0, 200, 150, 0.1);  /* #00c8961A */
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 12px 24px;
+  border-radius: 100px;
+  font-family: 'Outfit';
+  font-weight: 600;
+  transition: background 0.3s, color 0.3s;
+}
+.btn-primary:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
 ```
 
 ---
 
 ## Motion / Animation Principles
 
-1. **Page transitions:** Fade + slight upward slide (Framer Motion `AnimatePresence`)
-2. **Lesson content:** Staggered reveal of sections on scroll entry
-3. **Quiz transitions:** Card slides out left on submit, next card enters from right
-4. **Flashcard flip:** CSS `transform-style: preserve-3d` + `rotateY(180deg)` on flip
-5. **Unlock events:** Scale + glow pulse on newly unlocked lesson node
-6. **Achievement toast:** Slide in from top-right, auto-dismiss after 4s
-7. **Simulation playback:** Eased motion (ease-in-out), never linear — feels physical
-8. **No animation should block interaction** — all are interruptible
-9. **Reduced motion:** Respect `prefers-reduced-motion` — all animations have a static fallback
+**Two-layer animation system — never mix layers for the same element:**
+
+### Layer 1 — CSS-only (ambient, environmental, always-on)
+These run continuously or on simple hover/expand — no JS, no React lifecycle.
+
+| Effect | Implementation |
+|---|---|
+| Sidebar expand/collapse | `transition: width 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)` |
+| Sidebar label fade-in | `transition: opacity 0.3s; transition-delay: 0.1s` |
+| Orbit ring spin | `animation: spin 60s linear infinite` |
+| Glow pulse on active dots | `box-shadow` transition on `:hover` |
+| Progress bar glow | Static `box-shadow: 0 0 10px var(--accent)` — no animation |
+| Button hover fill | `transition: background 0.3s, color 0.3s` |
+| Backdrop blur on glass widgets | CSS `backdrop-filter: blur(16px)` — static |
+| Nav button hover | `background` transition, `color` transition |
+| Domain dot active state | `box-shadow` + `border-color` CSS transitions |
+| Background bloom | Static `radial-gradient` — no animation |
+
+### Layer 2 — Framer Motion (interaction-driven, component lifecycle)
+Used only when animation is triggered by user action, route change, or component mount/unmount.
+
+| Effect | Framer Motion pattern |
+|---|---|
+| Page transitions (route changes) | `AnimatePresence` + `motion.div` fade + `y: 20 → 0` |
+| Quiz card exit/enter | Slide left out (`x: -100`), new card enters from right (`x: 100 → 0`) |
+| Flashcard 3D flip | CSS `rotateY(180deg)` triggered by Framer Motion `animate` on click — `transform-style: preserve-3d` |
+| Lesson section reveal on scroll | `useInView` + staggered `opacity: 0 → 1`, `y: 30 → 0` per section |
+| Unlock event (lesson node) | Scale pulse `scale: 1 → 1.05 → 1` + glow class toggle |
+| Achievement toast | Slide in from top-right, auto-dismiss `opacity: 1 → 0` after 4s |
+| Modal enter/exit | `AnimatePresence` + scale `0.95 → 1` + fade |
+| Exam results score count-up | `useMotionValue` + `useTransform` counting animation |
+| Glass widget entrance on Dashboard | Staggered `opacity: 0 → 1`, `y: 20 → 0` on mount |
+
+**Rules:**
+- All Framer Motion animations are interruptible — set `transition: { type: 'tween' }` not spring where abrupt cancel is expected
+- Never animate `width` or `height` with Framer Motion — use CSS transitions for layout shifts (sidebar)
+- `prefers-reduced-motion`: wrap all Framer Motion variants in a helper that returns static values when `window.matchMedia('(prefers-reduced-motion: reduce)').matches`
+- No animation should delay interaction feedback by more than 150ms
 
 ---
 
-## Accessibility Considerations
+## UI / UX Implementation Spec
+
+This section defines per-screen layout patterns derived from the approved theme. Every screen inherits the global design system. Deviations require explicit design approval.
+
+### Dashboard (`/`)
+**Layout:** `position: relative` full-viewport container. Orbit centerpiece (`position: relative`, centered via flexbox). Glass widgets are `position: absolute` placed in four quadrants around the orbit.
+
+```
+[top-nav pill — centered, position:absolute, top:30px]
+
+[w-tl: Study Time]      [ORBIT CENTER: % + ring]     [w-tr: Domain Progression]
+
+[w-bl: Next Mock Exam]                               [w-br: Last Session + CTA]
+```
+
+Widget positions:
+- `w-tl`: `top: 15%; left: 8%; width: 280px`
+- `w-tr`: `top: 15%; right: 8%; width: 280px`
+- `w-bl`: `bottom: 10%; left: 8%; width: 280px`
+- `w-br`: `bottom: 10%; right: 8%; width: 320px` — accent bordered variant
+
+### Course Map (`/learn`)
+**Layout:** Sidebar (collapsed) + scrollable main content area. No orbit. Grid of domain blocks, each containing lesson nodes. Domain blocks are glass-widget style cards. Locked lessons use `opacity: 0.4` + lock icon overlay. Active lesson node gets `border-color: var(--accent)` + glow.
+
+### Lesson — Theory (`/learn/[domain]/[lesson]/theory`)
+**Layout:** Sidebar (collapsed) + centered reading column (max-width: 800px, `margin: 0 auto`). Scroll progress bar: `position: fixed; top: 0; height: 3px; background: var(--accent); box-shadow: 0 0 8px var(--accent)`. Callout blocks are glass-widget style with left border accent strip per variant type.
+
+### Simulation (`/learn/.../simulation`)
+**Layout:** Sidebar (collapsed) + full-height canvas area. Controls bar (Play/Pause/Speed/Mode toggle) at bottom as a floating pill — same pattern as top-nav. Passive/Active mode toggle is a pill toggle inside the controls bar.
+
+### Lab (`/learn/.../lab`)
+**Layout:** Sidebar (collapsed) + two-column split: `display: grid; grid-template-columns: 1fr 1fr`. Left panel: glass-widget card (Phase 1 instructions or Phase 2 objective). Right panel: CLI terminal with `background: #000; font-family: var(--mono)`. Topology canvas sits above or below instructions panel in left column.
+
+### Quiz (`/learn/.../quiz` and `/domain-exam/[domain]`)
+**Layout:** Sidebar (collapsed) + single centered question card (max-width: 680px). Full-viewport focus. Progress bar at top using lightning-track pattern. Difficulty indicator is a subtle pill badge below the progress bar. Question card is glass-widget with Framer Motion slide transitions.
+
+### Exam Config (`/exam`)
+**Layout:** Sidebar (collapsed) + centered config card (max-width: 600px). Glass-widget card containing all config inputs. Domain toggles use accent-colored checkbox/pill style. Sliders styled with accent track color + glow on thumb. Session preview card below config card — accent bordered glass-widget showing estimated time and breakdown.
+
+### Exam Session (`/exam/session`)
+**Layout:** ExamLayout — no sidebar, no top nav. Fixed header: question counter left, timer center (`font-family: var(--mono)`), submit button right. Question navigator panel: collapsible from right edge (`position: fixed; right: 0`). Question area: centered, single question card. Timer color: `var(--text)` → `var(--accent-amber)` at 20% → `var(--accent-red)` at 10%.
+
+### Exam Results (`/exam/results/[id]`)
+**Layout:** Sidebar (collapsed) + scrollable centered content. Large score display at top (same `font-size: 110px` weight as orbit percent). Domain radar chart (Recharts `RadarChart`) as glass-widget card. Full question review list below — each item is a compact glass-widget row.
+
+### Flashcards (`/flashcards/[domain]`)
+**Layout:** Sidebar (collapsed) + centered single card (500px × 320px). Perspective wrapper for 3D flip. Rating buttons below card as three pill buttons: Know It (accent), Unsure (amber), Don't Know (red). Session progress bar at top using lightning-track pattern.
+
+### Vault (`/vault`)
+**Layout:** Sidebar (collapsed) + two-column: search/filter panel (left, 280px) + card grid (right, masonry or 3-col grid). Each vault card is a compact glass-widget. Search bar: `background: var(--surface-solid); border: 1px solid var(--border); border-radius: 100px`.
+
+### Profile (`/profile`)
+**Layout:** Sidebar (collapsed) + centered content (max-width: 900px). Stats section uses glass-widget cards in a 3-column grid. Exam history section: Recharts `LineChart` for score trend inside a glass-widget. Admin bypass button: subtle, small, `color: var(--muted)` — no accent until hovered.
 
 - All interactive elements keyboard navigable
 - Quiz keyboard shortcuts: 1–4 for answer options, Enter to confirm

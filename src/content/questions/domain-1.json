@@ -1,0 +1,35 @@
+[
+  {
+    "id": "q-001",
+    "domainId": "domain-1",
+    "lessonId": "lesson-1",
+    "difficulty": 1,
+    "type": "single",
+    "stem": "Which OSI layer is responsible for logical addressing and routing decisions?",
+    "options": ["Physical", "Data Link", "Network", "Transport"],
+    "correct": [2],
+    "explanation": "The Network layer handles logical addressing and path selection between networks."
+  },
+  {
+    "id": "q-002",
+    "domainId": "domain-1",
+    "lessonId": "lesson-1",
+    "difficulty": 2,
+    "type": "drag",
+    "stem": "Order these OSI layers from highest to lowest.",
+    "options": ["Application", "Presentation", "Session", "Transport"],
+    "correct": [0, 1, 2, 3],
+    "explanation": "The upper half of the OSI model flows Application to Transport in that order."
+  },
+  {
+    "id": "q-003",
+    "domainId": "domain-1",
+    "lessonId": "lesson-2",
+    "difficulty": 2,
+    "type": "single",
+    "stem": "What address does a switch learn to build its MAC address table?",
+    "options": ["Destination MAC", "Source MAC", "Destination IP", "Source IP"],
+    "correct": [1],
+    "explanation": "Switches learn source MAC addresses on inbound frames and map them to ingress ports."
+  }
+]

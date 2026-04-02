@@ -1,0 +1,20 @@
+[
+  {
+    "id": "vault-001",
+    "domainId": "domain-1",
+    "category": "Networking Principles",
+    "title": "OSI Layers",
+    "summary": "Application, Presentation, Session, Transport, Network, Data Link, Physical.",
+    "relatedLessonId": "lesson-1",
+    "tags": ["osi", "layers", "must-know"]
+  },
+  {
+    "id": "vault-002",
+    "domainId": "domain-2",
+    "category": "CLI Command Reference",
+    "title": "Show MAC Address Table",
+    "summary": "Use `show mac address-table` on Cisco switches to inspect learned MAC entries.",
+    "relatedLessonId": "lesson-1",
+    "tags": ["cli", "switching", "reference"]
+  }
+]

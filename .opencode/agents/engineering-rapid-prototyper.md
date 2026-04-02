@@ -4,6 +4,7 @@ description: Specialized in ultra-fast proof-of-concept development and MVP crea
 color: "#008000"
 emoji: ⚡
 mode: subagent
+model: openai/gpt-5.4
 vibe: Turns an idea into a working prototype before the meeting's over.
 ---
 

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "fc-001",
+    "domainId": "domain-1",
+    "lessonId": "lesson-1",
+    "front": "Which OSI layer is responsible for routing packets between networks?",
+    "back": "Layer 3, the Network layer.",
+    "tags": ["osi", "routing", "network-layer"]
+  },
+  {
+    "id": "fc-002",
+    "domainId": "domain-1",
+    "lessonId": "lesson-2",
+    "front": "What source information does a switch learn when a frame arrives?",
+    "back": "The source MAC address and the port it arrived on.",
+    "tags": ["switching", "mac", "ethernet"]
+  }
+]
