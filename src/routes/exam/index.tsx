@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { RouteCard } from '../../components/ui/RouteCard';
+import { StatusPill } from '../../components/ui/StatusPill';
+import { WidgetCard } from '../../components/ui/WidgetCard';
 import { courseManifest } from '../../content/course';
 import { useExamStore } from '../../lib/stores/examStore';
 import type { ExamDifficultyMix, ExamQuestion } from '../../types/exam';
@@ -88,16 +90,16 @@ export default function ExamIndexRoute() {
         </button>
       </article>
 
-      <article className="glass-widget">
+      <WidgetCard>
         <p className="eyebrow">Available domains</p>
         <div className="metric-row">
           {courseManifest.map((domain) => (
-            <span key={domain.id} className="metric-pill">
+            <StatusPill key={domain.id}>
               {domain.title}
-            </span>
+            </StatusPill>
           ))}
         </div>
-      </article>
+      </WidgetCard>
     </section>
   );
 }

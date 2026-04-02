@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const topNavItems = [
   { to: '/learn', label: 'Course Map' },
@@ -11,9 +11,13 @@ export function DashboardTopNav() {
   return (
     <div className="top-nav" role="navigation" aria-label="Dashboard shortcuts">
       {topNavItems.map((item) => (
-        <Link key={item.to} to={item.to} className="nav-btn">
+        <NavLink
+          key={item.to}
+          to={item.to}
+          className={({ isActive }) => ['nav-btn', isActive ? 'nav-btn--active' : ''].filter(Boolean).join(' ')}
+        >
           {item.label}
-        </Link>
+        </NavLink>
       ))}
     </div>
   );

@@ -1,7 +1,10 @@
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import { EmptyState } from '../../../components/ui/EmptyState';
 import { RouteCard } from '../../../components/ui/RouteCard';
+import { StatusPill } from '../../../components/ui/StatusPill';
+import { WidgetCard } from '../../../components/ui/WidgetCard';
 import { useExamStore } from '../../../lib/stores/examStore';
 
 export default function ExamResultsRoute() {
@@ -19,15 +22,16 @@ export default function ExamResultsRoute() {
   if (!result) {
     return (
       <section className="page-shell">
-        <RouteCard
+        <EmptyState
           eyebrow="Exam Results"
           title="Result not found"
           description="Run a starter exam session to populate local exam history."
-        >
-          <Link className="btn-primary" to="/exam">
-            Back to exam setup
-          </Link>
-        </RouteCard>
+          action={
+            <Link className="btn-primary" to="/exam">
+              Back to exam setup
+            </Link>
+          }
+        />
       </section>
     );
   }
@@ -41,22 +45,22 @@ export default function ExamResultsRoute() {
         accent
       >
         <div className="metric-row">
-          <span className="metric-pill">{result.passed ? 'Pass' : 'Retry suggested'}</span>
-          <span className="metric-pill">{result.score.percent.toFixed(1)}%</span>
-          <span className="metric-pill">{result.config.questionCount} questions</span>
+          <StatusPill tone={result.passed ? 'success' : 'warning'}>{result.passed ? 'Pass' : 'Retry suggested'}</StatusPill>
+          <StatusPill>{result.score.percent.toFixed(1)}%</StatusPill>
+          <StatusPill>{result.config.questionCount} questions</StatusPill>
         </div>
       </RouteCard>
 
-      <article className="glass-widget">
+      <WidgetCard>
         <p className="eyebrow">Selected domains</p>
         <div className="metric-row">
           {result.config.domains.map((domainId) => (
-            <span key={domainId} className="metric-pill">
+            <StatusPill key={domainId}>
               {domainId}
-            </span>
+            </StatusPill>
           ))}
         </div>
-      </article>
+      </WidgetCard>
     </section>
   );
 }

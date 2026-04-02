@@ -2,7 +2,11 @@ import { ArrowRight, CheckCircle2, Clock3, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { DashboardTopNav } from '../../components/navigation/DashboardTopNav';
+import { ProgressTrack } from '../../components/ui/ProgressTrack';
 import { RouteCard } from '../../components/ui/RouteCard';
+import { SectionHeading } from '../../components/ui/SectionHeading';
+import { StatusPill } from '../../components/ui/StatusPill';
+import { WidgetCard } from '../../components/ui/WidgetCard';
 import { courseManifest } from '../../content/course';
 import { useExamStore } from '../../lib/stores/examStore';
 import { useProgressStore } from '../../lib/stores/progressStore';
@@ -18,9 +22,20 @@ export default function DashboardRoute() {
     0,
   );
   const completionPercent = Math.round((completedLessons / totalLessons) * 100);
-  const nextDomain = courseManifest.find((domain) => domains[domain.id]?.unlocked);
-  const nextLesson = nextDomain?.lessons.find((lesson) => domains[nextDomain.id]?.lessons[lesson.id]?.unlocked);
+  const nextDomain =
+    courseManifest.find((domain) => domains[domain.id]?.unlocked && !domains[domain.id]?.examPassed) ??
+    courseManifest.find((domain) => domains[domain.id]?.unlocked);
+  const nextLesson =
+    nextDomain?.lessons.find((lesson) => {
+      const lessonProgress = domains[nextDomain.id]?.lessons[lesson.id];
+
+      return lessonProgress?.unlocked && !lessonProgress.passed;
+    }) ?? nextDomain?.lessons.find((lesson) => domains[nextDomain.id]?.lessons[lesson.id]?.unlocked);
   const lastExam = history.at(-1);
+  const currentDomainPassedLessons = nextDomain
+    ? nextDomain.lessons.filter((lesson) => domains[nextDomain.id]?.lessons[lesson.id]?.passed).length
+    : completedLessons;
+  const currentDomainLessonCount = nextDomain ? nextDomain.lessons.length : totalLessons;
 
   return (
     <section className="dashboard-page page-shell">
@@ -33,15 +48,15 @@ export default function DashboardRoute() {
           description="The scaffold is ready for week-one work: routes, stores, content seeds, and local persistence are in place."
         >
           <div className="metric-row">
-            <span className="metric-pill">
+            <StatusPill>
               <Clock3 size={16} />
               45-90 minute sessions
-            </span>
+            </StatusPill>
           </div>
         </RouteCard>
 
-        <section className="orbit-panel glass-widget">
-          <p className="eyebrow">Overall Progress</p>
+        <WidgetCard as="section" className="orbit-panel">
+          <SectionHeading eyebrow="Overall Progress" title="Milestone 1 shell" description="Design tokens, shell primitives, and browser persistence are now aligned around one visual baseline." compact />
           <div className="orbit-container">
             <div className="orbit-ring" />
             <div className="orbit-center">
@@ -49,18 +64,24 @@ export default function DashboardRoute() {
               <p className="orbit-caption">Lessons passed</p>
             </div>
           </div>
-        </section>
+          <ProgressTrack value={completedLessons} max={totalLessons} label={`${completedLessons} of ${totalLessons} lessons cleared`} className="orbit-panel__progress" />
+        </WidgetCard>
 
         <RouteCard
           eyebrow="Current Domain"
           title={nextDomain?.title ?? 'All current domains complete'}
           description="The course map and gate logic are wired so MVP content can now be added lesson by lesson."
         >
+          <ProgressTrack
+            value={currentDomainPassedLessons}
+            max={currentDomainLessonCount}
+            label={nextDomain ? `${currentDomainPassedLessons} of ${currentDomainLessonCount} lessons passed` : 'All unlocked lessons completed'}
+          />
           <div className="metric-row">
-            <span className="metric-pill">
+            <StatusPill>
               <Target size={16} />
               {nextDomain ? `${nextDomain.weight}% exam weight` : 'Ready for more content'}
-            </span>
+            </StatusPill>
           </div>
         </RouteCard>
 
@@ -87,10 +108,10 @@ export default function DashboardRoute() {
           accent
         >
           <div className="metric-row">
-            <span className="metric-pill">
+            <StatusPill tone={lastExam ? (lastExam.passed ? 'success' : 'warning') : 'accent'}>
               <CheckCircle2 size={16} />
               {lastExam ? (lastExam.passed ? 'Passed' : 'Needs review') : 'Ready to benchmark'}
-            </span>
+            </StatusPill>
           </div>
         </RouteCard>
       </div>

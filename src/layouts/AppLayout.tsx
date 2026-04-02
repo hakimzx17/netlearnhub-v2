@@ -7,7 +7,9 @@ export function AppLayout() {
     <div className="app-layout">
       <Sidebar />
       <main className="app-layout__content">
-        <Outlet />
+        <div className="app-layout__viewport">
+          <Outlet />
+        </div>
       </main>
     </div>
   );

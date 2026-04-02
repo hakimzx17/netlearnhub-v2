@@ -1,4 +1,6 @@
 import { RouteCard } from '../../components/ui/RouteCard';
+import { StatusPill } from '../../components/ui/StatusPill';
+import { WidgetCard } from '../../components/ui/WidgetCard';
 import { AdminUnlockDialog } from '../../components/profile/AdminUnlockDialog';
 import { useExamStore } from '../../lib/stores/examStore';
 import { useProgressStore } from '../../lib/stores/progressStore';
@@ -21,17 +23,17 @@ export default function ProfileRoute() {
         description="Progress, admin bypass state, and exam history are already persisted locally so feature work can continue against stable browser state."
       >
         <div className="metric-row">
-          <span className="metric-pill">Passed lessons: {passedLessons}</span>
-          <span className="metric-pill">Exam attempts: {history.length}</span>
-          <span className="metric-pill">Admin unlock: {adminUnlocked ? 'Enabled' : 'Disabled'}</span>
+          <StatusPill>Passed lessons: {passedLessons}</StatusPill>
+          <StatusPill>Exam attempts: {history.length}</StatusPill>
+          <StatusPill tone={adminUnlocked ? 'success' : 'neutral'}>Admin unlock: {adminUnlocked ? 'Enabled' : 'Disabled'}</StatusPill>
         </div>
       </RouteCard>
 
-      <article className="glass-widget compact-card">
+      <WidgetCard className="compact-card">
         <p className="eyebrow">Admin bypass</p>
         <p>This is intentionally local-only and mirrors the PRD security note that it is not real access control.</p>
         <AdminUnlockDialog />
-      </article>
+      </WidgetCard>
     </section>
   );
 }

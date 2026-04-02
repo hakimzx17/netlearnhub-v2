@@ -1,7 +1,11 @@
 import { Flag, TimerReset } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { EmptyState } from '../../components/ui/EmptyState';
+import { ProgressTrack } from '../../components/ui/ProgressTrack';
 import { RouteCard } from '../../components/ui/RouteCard';
+import { StatusPill } from '../../components/ui/StatusPill';
+import { WidgetCard } from '../../components/ui/WidgetCard';
 import { useExamStore } from '../../lib/stores/examStore';
 
 export default function ExamSessionRoute() {
@@ -15,20 +19,23 @@ export default function ExamSessionRoute() {
   if (!session) {
     return (
       <section className="page-shell">
-        <RouteCard
+        <EmptyState
           eyebrow="Exam Session"
           title="No active session"
           description="Create a mock exam first. Active sessions persist in sessionStorage so accidental refreshes do not wipe the session."
-        >
-          <Link className="btn-primary" to="/exam">
-            Open exam setup
-          </Link>
-        </RouteCard>
+          action={
+            <Link className="btn-primary" to="/exam">
+              Open exam setup
+            </Link>
+          }
+        />
       </section>
     );
   }
 
   const currentQuestion = session.questions[0];
+  const answeredCount = Object.keys(session.answers).length;
+  const timeRemainingMinutes = Math.max(0, Math.ceil(session.timeRemainingMs / 60000));
 
   const handleSubmit = () => {
     const rawScore = Object.keys(session.answers).length;
@@ -59,9 +66,12 @@ export default function ExamSessionRoute() {
       <RouteCard
         eyebrow="Exam Session"
         title={`${session.questions.length} starter questions`}
-        description="This is the dedicated full-screen shell for the timed experience. Navigator, timer, and lab variants can now be layered into this route."
+        description="This route now carries the dedicated exam shell language: fixed-feeling header pills, progress track, and a clean question surface for later question and lab variants."
       >
+        <ProgressTrack value={answeredCount} max={session.questions.length} label={`${answeredCount} of ${session.questions.length} questions answered`} />
         <div className="route-actions">
+          <StatusPill tone="warning">{timeRemainingMinutes} min remaining</StatusPill>
+          <StatusPill tone="neutral">{session.flags.length} flagged</StatusPill>
           {currentQuestion ? (
             <button
               type="button"
@@ -88,8 +98,13 @@ export default function ExamSessionRoute() {
       </RouteCard>
 
       {currentQuestion ? (
-        <article className="glass-widget question-card question-card--exam">
-          <p className="eyebrow">Question 1 of {session.questions.length}</p>
+        <WidgetCard className="question-card question-card--exam">
+          <div className="question-card__meta">
+            <StatusPill>Question 1 of {session.questions.length}</StatusPill>
+            <StatusPill tone={session.flags.includes(currentQuestion.id) ? 'warning' : 'neutral'}>
+              {session.flags.includes(currentQuestion.id) ? 'Flagged for review' : 'Not flagged'}
+            </StatusPill>
+          </div>
           <h2 className="section-title">{currentQuestion.stem}</h2>
           <ul className="option-list">
             {currentQuestion.options.map((option) => (
@@ -98,7 +113,7 @@ export default function ExamSessionRoute() {
               </li>
             ))}
           </ul>
-        </article>
+        </WidgetCard>
       ) : null}
     </section>
   );

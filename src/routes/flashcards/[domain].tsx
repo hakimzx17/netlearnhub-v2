@@ -1,8 +1,10 @@
 import flashcards from '../../content/flashcards/domain-1.json';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { EmptyState } from '../../components/ui/EmptyState';
 import { RouteCard } from '../../components/ui/RouteCard';
+import { StatusPill } from '../../components/ui/StatusPill';
 import { getDomain } from '../../content/course';
 import { useFlashcardStore } from '../../lib/stores/flashcardStore';
 import type { FlashcardData } from '../../types/flashcard';
@@ -21,10 +23,7 @@ export default function DomainFlashcardsRoute() {
   const rateCard = useFlashcardStore((state) => state.rateCard);
   const endSession = useFlashcardStore((state) => state.endSession);
 
-  const domainCards = useMemo(
-    () => typedFlashcards.filter((card) => card.domainId === domainId),
-    [domainId],
-  );
+  const domainCards = typedFlashcards.filter((card) => card.domainId === domainId);
 
   useEffect(() => {
     void hydrate();
@@ -32,9 +31,9 @@ export default function DomainFlashcardsRoute() {
 
   useEffect(() => {
     if (hydrated) {
-      startSession(domainCards.map((card) => card.id));
+      startSession(typedFlashcards.filter((card) => card.domainId === domainId).map((card) => card.id));
     }
-  }, [domainCards, hydrated, startSession]);
+  }, [domainId, hydrated, startSession]);
 
   if (!domain) {
     return (
@@ -64,23 +63,30 @@ export default function DomainFlashcardsRoute() {
       >
         {currentCard ? (
           <div className="metric-row">
-            <span className="metric-pill">
+            <StatusPill>
               Reviewed {cards[currentCard.id]?.reviewCount ?? 0} time(s)
-            </span>
+            </StatusPill>
           </div>
         ) : null}
       </RouteCard>
 
       {currentCard ? (
-        <article
+        <button
+          type="button"
           className="glass-widget flashcard-shell"
+          aria-pressed={isCurrentCardRevealed}
+          aria-label={
+            isCurrentCardRevealed
+              ? `Hide answer for flashcard: ${currentCard.front}`
+              : `Reveal answer for flashcard: ${currentCard.front}`
+          }
           onClick={() => {
             setRevealedCardId((value) => (value === currentCard.id ? null : currentCard.id));
           }}
         >
           <p className="eyebrow">Click card to flip</p>
           <h2 className="flashcard-shell__content">{isCurrentCardRevealed ? currentCard.back : currentCard.front}</h2>
-        </article>
+        </button>
       ) : null}
 
       {currentCard ? (
@@ -98,7 +104,13 @@ export default function DomainFlashcardsRoute() {
             End session
           </button>
         </div>
-      ) : null}
+      ) : (
+        <EmptyState
+          eyebrow={`${domain.title} / Flashcards`}
+          title="No due flashcards"
+          description="This deck is clear for now. New review outcomes are persisted in IndexedDB and will surface here again when cards become due."
+        />
+      )}
     </section>
   );
 }
