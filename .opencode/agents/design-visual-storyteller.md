@@ -5,7 +5,6 @@ color: "#800080"
 emoji: 🎬
 vibe: Transforms complex information into visual narratives that move people.
 mode: subagent
-model: openai/gpt-5.4
 variant: high
 ---
 

@@ -6,20 +6,20 @@ Read it before making changes.
 
 ## Source Of Truth
 - Read `docs/PRD.md` before substantial product work.
+- For lesson-section UI work, read `docs/buildingLesson.md` first and treat it as the source of truth for the Domains Directory grid, Lesson Detail View, module sidebar, tab structure, centered content framing, and sidebar-safe spacing.
 - Treat `docs/PRD.md` as the product source of truth for naming, flows, and domain language.
 - Treat the checked-in code as the implementation source of truth for what exists today.
 - Prefer repo reality over aspirational docs when they conflict.
 
 ## Repo Reality
-- The checked-in app is currently a static `index.html` served by `server.js`.
-- `package.json` lists React, Vite, Tailwind, Motion, and TypeScript, but the current app does not yet use that full stack.
-- `vite.config.ts` exists, but `npm run dev` does not run Vite today.
-- There is no `src/` directory yet.
-- There are no checked-in tests.
-- There is no configured test runner.
-- There is no real lint setup despite a `lint` script existing.
+- The checked-in app now boots through Vite and renders from `src/main.tsx`.
+- `src/` exists and currently contains app shell, dashboard, route placeholders, persisted stores, and baseline tests.
+- The current UI is React + TypeScript with CSS variables in `src/styles.css`.
+- React Router routes already match the PRD information architecture at a placeholder level.
+- Zustand persistence is in place for guest profile and progress state.
+- The curriculum content systems are still mostly placeholders; Milestone 1 and later fill those in.
 - There is no Prettier config.
-- `server.js` uses Express and serves the project root as static files.
+- `server.js` still exists but is no longer the primary local dev workflow.
 - The PRD is ahead of the current implementation; build incrementally from what exists.
 
 ## Rule Files
@@ -39,30 +39,29 @@ Read it before making changes.
 - Start local server: `npm run dev`
 - Preview locally: `npm run preview`
 - List available scripts: `npm run`
-- Current `dev` command: `node server.js`
-- Current `preview` command: `node server.js`
+- Current `dev` command: `vite`
+- Current `preview` command: `vite preview`
 - Current dev server port: `3000`
 - Current build script: `npm run build`
-- Current build behavior: prints `No build step needed`
+- Current build behavior: runs `npm run typecheck` and then `vite build`
 - Current lint script: `npm run lint`
-- Current lint behavior: prints `No linting needed`
+- Current lint behavior: runs `eslint src vite.config.ts`
+- Current typecheck command: `npm run typecheck`
 - Current test command: `npm test`
-- Current test behavior: fails because there is no `test` script
-- Best available manual type check after install: `npx tsc --noEmit`
-- `npm run clean` currently uses `rm -rf dist` and fails in Windows `cmd`
+- Current test behavior: runs `vitest run`
+- Watch tests: `npm run test:watch`
+- `npm run clean` uses `rimraf dist coverage`
 
 ## Single Test Guidance
-- There is no supported single-test command today.
-- There is no `tests/` directory and no `*.test.*` or `*.spec.*` files.
-- Do not claim to have run a single test unless you first add a real test runner and test files.
-- If you add a test framework, update this file with exact commands for full run, watch mode, single file, and single test name pattern.
+- Test files currently live in `src/test/`.
+- Run a single test file with `npx vitest run src/test/dashboardPage.test.tsx`.
+- Run a single test by name with `npx vitest run -t "renders persisted progress widgets and resume action"`.
+- Use `npm run test:watch` during active frontend work.
 
 ## Verification Rules
 - Be explicit about which commands you actually ran.
-- Distinguish real checks from placeholder scripts.
-- Do not say lint passed when the lint script only echoes text.
-- Do not say build passed when the build script is a placeholder.
-- Do not say tests passed when no test runner exists.
+- Distinguish real checks from visual inspection.
+- If you use DevTools for validation, say which routes and breakpoints you checked.
 - If you add tooling, update both `package.json` scripts and this file.
 
 ## Change Strategy
@@ -119,21 +118,25 @@ Read it before making changes.
 
 ## Frontend Guidance
 - Preserve the product direction from the PRD: dark UI, emerald accent, glassy surfaces, and `Outfit` typography.
+- `JetBrains Mono` is now available and should be used for CLI-oriented UI.
+- When implementing the lessons section, follow the two-tier pattern from `docs/buildingLesson.md`: centered Domains Directory grid plus Lesson Detail View with module sidebar and tabs for Theory, Simulation, Practice Lab, Flash cards, and Lesson Quiz.
+- Keep primary content visually centered within the main content area. UI elements, lesson text, headers, diagrams, and similar learning surfaces should not be anchored to the top-left or left edge in a way that visually collides with the sidebar.
+- Leave enough horizontal spacing and use sensible max-width constraints so opening the sidebar does not interfere with, crowd, or overlap the main content.
 - Keep accessibility intact.
 - Use semantic HTML before adding ARIA.
 - Preserve visible focus states and keyboard interaction.
-- Prefer function components if and when React components are introduced.
+- Prefer function components.
 - Keep components focused on one responsibility.
 - Keep hooks at the top level.
 - Prefer local state before introducing shared state.
 - Do not add memoization by default.
-- Follow the actual styling system in the files you touch; today that means plain CSS in `index.html`, not a mature Tailwind component system.
+- Follow the current styling system in `src/styles.css`; use the existing tokens and component classes before introducing a new styling layer.
 
 ## State And Persistence
 - The PRD expects frontend-only persistence with `localStorage`.
-- For future React work, do not scatter direct `localStorage` reads across components.
-- Centralize persistence behind stores or hooks.
-- Keep persistence keys explicit and stable.
+- Do not scatter direct `localStorage` reads across components.
+- Centralize persistence behind Zustand stores or future shared hooks.
+- Keep persistence keys explicit and stable: current keys are `nlh_profile` and `nlh_progress`.
 - Treat long-lived study progress differently from ephemeral exam-session state.
 
 ## Comments, Docs, And Generated Files
@@ -145,8 +148,9 @@ Read it before making changes.
 - Do not commit secrets.
 
 ## Practical Workflow
-- Read `package.json`, `server.js`, `vite.config.ts`, and `docs/PRD.md` before substantial changes.
+- Read `package.json`, `vite.config.ts`, `src/router.tsx`, `src/store/profileStore.ts`, `src/store/progressStore.ts`, and `docs/PRD.md` before substantial changes.
+- Before building or changing the lessons section, use the Read tool on `docs/buildingLesson.md` first.
 - Inspect nearby code before introducing new patterns.
 - Verify commands honestly.
-- Call out placeholders and missing tooling instead of pretending they exist.
+- Call out placeholder routes and incomplete milestone work instead of pretending features exist.
 - When you add new repo conventions, codify them in `AGENTS.md`.

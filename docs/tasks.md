@@ -4,6 +4,7 @@
 - This plan translates `docs/PRD.md` into milestone-based execution tasks.
 - Tasks are ordered by dependency, not just by feature popularity.
 - Each milestone should end with a demoable product increment.
+- For any lessons-section work, read `docs/buildingLesson.md` first and use it as the reference for the Domains Directory grid, Lesson Detail View, tab flow, centered content framing, and sidebar-safe spacing.
 - The current repo starts from a static `index.html` served by `server.js`, so early tasks focus on establishing the real app foundation.
 - Check off tasks as they are completed and adjust scope only when repo reality forces a change.
 
@@ -13,57 +14,65 @@
 **Depends on:** Existing repo baseline only.
 
 ### Tasks
-- [ ] Audit the current static dashboard in `index.html` and identify reusable layout sections, styling tokens, and interactions.
-- [ ] Stand up the real React + TypeScript + Vite application entry point.
-- [ ] Create the initial `src/` structure for pages, components, content, hooks, stores, and shared utilities.
-- [ ] Replace placeholder npm workflow with real application scripts for `dev`, `build`, and `preview`.
-- [ ] Fix the cross-platform clean workflow so it works on Windows as well as Unix-like shells.
-- [ ] Add core app dependencies required by the PRD architecture, especially routing and persisted state management.
-- [ ] Add baseline engineering checks: typecheck, linting, and a lightweight test setup appropriate for the frontend stack.
-- [ ] Build the app shell: sidebar, top navigation, page shell, route container, and not-found state.
-- [ ] Extract the current visual design into global tokens for dark background, emerald accent, glass surfaces, and typography.
-- [ ] Add `Outfit` and `JetBrains Mono` typography handling for UI and CLI contexts.
-- [ ] Build reusable primitives: button, card, badge, modal, tooltip, progress ring.
-- [ ] Create the persisted profile store and progress store.
-- [ ] Implement the guest profile setup flow and persist profile data locally.
-- [ ] Migrate the current dashboard from static HTML into reusable React components.
-- [ ] Add route placeholders for all major PRD pages so the navigation model exists early.
-- [ ] Document the resulting scripts, architecture decisions, and repo workflow updates.
+- [x] Audit the current static dashboard in `index.html` and identify reusable layout sections, styling tokens, and interactions.
+- [x] Stand up the real React + TypeScript + Vite application entry point.
+- [x] Create the initial `src/` structure for pages, components, content, hooks, stores, and shared utilities.
+- [x] Replace placeholder npm workflow with real application scripts for `dev`, `build`, and `preview`.
+- [x] Fix the cross-platform clean workflow so it works on Windows as well as Unix-like shells.
+- [x] Add core app dependencies required by the PRD architecture, especially routing and persisted state management.
+- [x] Add baseline engineering checks: typecheck, linting, and a lightweight test setup appropriate for the frontend stack.
+- [x] Build the app shell: sidebar, top navigation, page shell, route container, and not-found state.
+- [x] Extract the current visual design into global tokens for dark background, emerald accent, glass surfaces, and typography.
+- [x] Add `Outfit` and `JetBrains Mono` typography handling for UI and CLI contexts.
+- [x] Build reusable primitives: button, card, badge, modal, tooltip, progress ring.
+- [x] Create the persisted profile store and progress store.
+- [x] Implement the guest profile setup flow and persist profile data locally.
+- [x] Migrate the current dashboard from static HTML into reusable React components.
+- [x] Add route placeholders for all major PRD pages so the navigation model exists early.
+- [x] Document the resulting scripts, architecture decisions, and repo workflow updates.
 
 ### Done When
-- [ ] The app boots through the React/Vite entry point.
-- [ ] The dashboard is rendered from React components rather than raw static markup.
-- [ ] App-level state persists correctly across refreshes.
-- [ ] Core routes exist and navigation works end to end.
+- [x] The app boots through the React/Vite entry point.
+- [x] The dashboard is rendered from React components rather than raw static markup.
+- [x] App-level state persists correctly across refreshes.
+- [x] Core routes exist and navigation works end to end.
 
-## Milestone 1: Domain Navigation And Lesson Reader
-**Objective:** Deliver the first meaningful learning flow for reading lessons.
+## Milestone 1: Learning Structures, UI/UX, And Theme Fidelity
+**Objective:** Establish the correct two-tier lessons UI from `docs/buildingLesson.md` so theory, simulations, practice labs, flash cards, and lesson quizzes plug into a coherent, theme-correct UX.
 
 **Depends on:** Milestone 0.
 
 ### Tasks
-- [ ] Define TypeScript models for lessons, sections, callouts, CLI spotlights, checkpoints, and summary cards.
-- [ ] Build the domain overview page with lesson list, progress indicators, and lock-state presentation.
-- [ ] Build lesson list item components with locked, available, in-progress, passed, and failed states.
-- [ ] Build the lesson reader layout with sticky section navigation.
+- [ ] Read `docs/buildingLesson.md` first and lock the two-tier lessons structure before implementation starts.
+- [ ] Define TypeScript models for domain directory cards, module sidebar items, lessons, theory sections, callouts, CLI spotlights, checkpoints, summary cards, simulation metadata, lab metadata, flashcard metadata, and quiz metadata.
+- [ ] Review the lessons information architecture against `docs/PRD.md` and align the flow to Domains Directory -> Lesson Detail View -> Theory / Simulation / Practice Lab / Flash cards / Lesson Quiz.
+- [ ] Build the centered `Lessons Directory` container pattern with max-width, horizontal padding, and spacing that keeps content clear of the app sidebar.
+- [ ] Build the domains grid with large domain cards, progress bars, hover states, active emphasis, and locked-state presentation.
+- [ ] Build the `Lesson Detail View` shell with back-to-domains navigation, domain eyebrow, lesson title, and centered main-content framing.
+- [ ] Build the module sidebar with completed, active, and locked lesson/module states.
+- [ ] Build the tab navigation for Theory, Simulation, Practice Lab, Flash cards, and Lesson Quiz.
+- [ ] Build tab switching logic and transition behavior that matches the `docs/buildingLesson.md` interaction model.
+- [ ] Build the Theory tab surface for deep-dive content with clear continuation actions into the next study step.
 - [ ] Build callout block components for `WHY THIS MATTERS`, `EXAM TRAP`, `REMEMBER THIS`, `REAL WORLD`, and `ANALOGY`.
 - [ ] Build CLI spotlight rendering with code formatting and explanation support.
 - [ ] Build visual block support for inline diagrams and topology illustrations.
 - [ ] Build concept checkpoint interactions with immediate feedback and no grading pressure.
 - [ ] Build summary card rendering and prepare the hook-in point for vault review storage.
+- [ ] Add resume/open-lesson entry points from dashboard and domain surfaces into the new lesson detail view.
+- [ ] Review lesson UI/UX for readability, pacing, scannability, focus states, progress cues, and tab clarity.
+- [ ] Validate theme fidelity across typography, spacing, glass surfaces, emerald accents, contrast, and centered composition.
 - [ ] Implement lesson progress updates for started, resumed, and viewed states.
-- [ ] Author Domain 1 lesson content as typed modules.
-- [ ] Review Domain 1 lesson ordering against the PRD domain structure.
 - [ ] Connect dashboard widgets to real lesson progress and last-session data.
-- [ ] Add accessibility coverage for keyboard navigation, heading structure, and reading flow.
+- [ ] Add accessibility coverage for keyboard navigation, heading structure, reading flow, and tab interactions.
 
 ### Done When
-- [ ] A user can open Domain 1 and navigate a complete lesson-reading experience.
-- [ ] Lesson content is driven by structured data modules.
+- [ ] A user can open the Domains Directory, choose a domain, open the Lesson Detail View, and move across the five lesson tabs.
+- [ ] Structured lesson data can drive the Lessons Directory and Lesson Detail View without bespoke per-lesson layouts.
+- [ ] Lesson surfaces are UI/UX correct, centered, and visually aligned with `docs/buildingLesson.md` and the PRD theme.
 - [ ] Domain overview and dashboard both reflect real stored lesson progress.
 
 ## Milestone 2: Quiz Engine And Unlock Logic
-**Objective:** Complete the first gated progression loop for lessons and domains.
+**Objective:** Complete the gated progression loop for lesson-quiz tabs and domains.
 
 **Depends on:** Milestone 1.
 
@@ -78,49 +87,50 @@
 - [ ] Build the quiz progress bar, timing display, and animated answer states.
 - [ ] Build the results screen with score ring, breakdown, and missed-question review actions.
 - [ ] Persist quiz attempts, scores, dates, and missed-question IDs.
+- [ ] Mount the quiz experience into the Lesson Detail View's `Lesson Quiz` tab or its direct launch flow without breaking the tabbed lesson structure.
 - [ ] Implement the pure unlock engine for lessons and domains.
 - [ ] Update progress state when lesson quizzes are passed or failed.
 - [ ] Wire quiz outcomes into next-lesson unlock behavior.
 - [ ] Build domain quiz support and domain completion behavior.
-- [ ] Author Domain 1 lesson quizzes and the Domain 1 domain quiz.
-- [ ] Validate the full Domain 1 progression from lesson to quiz to unlock.
+- [ ] Add review actions that fast-track missed questions back to the correct lesson sections.
+- [ ] Validate the full lesson -> quiz -> unlock loop with representative seeded content.
 
 ### Done When
-- [ ] A user can pass a lesson quiz and unlock the next lesson.
+- [ ] A user can open the `Lesson Quiz` tab, pass a lesson quiz, and unlock the next lesson.
 - [ ] Domain completion status updates correctly after the domain quiz.
 - [ ] Quiz history survives refresh and return visits.
 
-## Milestone 3: Simulation MVP
-**Objective:** Add the first lesson-linked simulations that make abstract networking concepts visual.
+## Milestone 3: Simulation Platform
+**Objective:** Build the shared simulation platform that lesson-specific simulations will use inside the lesson-detail experience.
 
 **Depends on:** Milestones 0 through 2.
 
 ### Tasks
 - [ ] Define the shared simulation contract for lesson-specific simulation components.
+- [ ] Build the `Simulation` tab surface or entry state used by the Lesson Detail View.
 - [ ] Build the shared simulation shell with play, pause, step-through, speed control, and caption panel.
 - [ ] Add simulation state tracking so progress can reflect whether the sim was viewed.
 - [ ] Build desktop-only guard behavior for simulation routes.
 - [ ] Implement reduced-motion behavior where motion is minimized but content remains understandable.
-- [ ] Build the Packet Flow simulation.
-- [ ] Build the Subnetting Visualizer simulation.
-- [ ] Build the VLAN Segmentation simulation.
-- [ ] Ensure each simulation has labels, caption updates, and clear visual state mapping.
+- [ ] Build one reference simulation that proves the shell, labels, caption updates, and progression hooks.
+- [ ] Ensure the shared simulation patterns support clear visual state mapping and instructional captions.
 - [ ] Connect lesson flow into simulation routes and back out to lab or quiz progression.
-- [ ] Validate layout stability so simulations do not break page structure.
-- [ ] Run content and UX review to confirm each simulation teaches a specific concept rather than acting as decoration.
+- [ ] Validate layout stability and theme fidelity so simulations do not break page structure.
+- [ ] Run content and UX review to confirm the simulation platform teaches concepts rather than acting as decoration.
 
 ### Done When
-- [ ] At least three lesson-specific simulations are working in the product.
+- [ ] Shared simulation infrastructure can support bespoke lesson-specific simulations.
 - [ ] Simulation routes respect desktop-only constraints.
-- [ ] Simulation completion fits into the lesson progression experience.
+- [ ] Simulation completion fits into the lesson-detail progression experience.
 
-## Milestone 4: Hands-On Lab MVP
-**Objective:** Deliver the first CLI-based lab experience with deterministic validation.
+## Milestone 4: Hands-On Lab Platform
+**Objective:** Deliver the shared CLI-based lab platform and prove it with a deterministic reference lab launched from the lesson-detail experience.
 
 **Depends on:** Milestones 0 through 3.
 
 ### Tasks
 - [ ] Define the lab content model for topology, objectives, hints, initial state, and validation.
+- [ ] Build the `Practice Lab` tab surface with lab overview, launch CTA, and supporting actions that match `docs/buildingLesson.md`.
 - [ ] Build the lab shell with topology panel, terminal panel, and lab brief/objectives area.
 - [ ] Build the CLI prompt and mode-switching state machine.
 - [ ] Support IOS-style mode transitions such as `enable`, `configure terminal`, interface config, and router config modes.
@@ -136,17 +146,17 @@
 - [ ] Add guided mode with next-command assistance.
 - [ ] Add hint toggling that does not penalize progress.
 - [ ] Add full lab reset behavior.
-- [ ] Author the first set of Domain 1 labs.
+- [ ] Build one reference lab scenario to validate the engine end to end.
 - [ ] Connect lab completion to lesson progress state.
 - [ ] Test lab determinism so repeated command sequences produce consistent outcomes.
 
 ### Done When
-- [ ] A user can complete a guided lab and see objectives update correctly.
+- [ ] A user can complete a guided reference lab and see objectives update correctly.
 - [ ] CLI, topology, and validation state remain synchronized.
-- [ ] Labs can be reset safely without corrupting progress.
+- [ ] Labs can be launched from the `Practice Lab` tab and reset safely without corrupting progress.
 
-## Milestone 5: Flashcards And Vault
-**Objective:** Deliver the review systems that remain available outside the gated lesson loop.
+## Milestone 5: Flashcards And Vault Platform
+**Objective:** Deliver the review systems that remain available outside the gated lesson loop while also supporting lesson-linked flashcard entry from the lesson-detail view.
 
 **Depends on:** Milestone 0 for base architecture. Lesson progression integration benefits from Milestones 1 and 2.
 
@@ -156,29 +166,173 @@
 - [ ] Build the flashcard store and persist card progress locally.
 - [ ] Build the flashcard deck picker.
 - [ ] Build the active flashcard session view.
+- [ ] Build the lesson-linked `Flash cards` tab entry surface used by the Lesson Detail View.
 - [ ] Build card flip interaction and difficulty rating controls.
 - [ ] Add session stats and due-card handling.
 - [ ] Add keyboard shortcuts for flip and rating.
 - [ ] Add support for optional diagram and CLI-backed cards.
-- [ ] Author all six domain flashcard decks.
 - [ ] Define the vault content model.
 - [ ] Build the vault layout with category navigation and content area.
 - [ ] Build client-side search across vault content.
 - [ ] Add bookmark persistence and a personal saved-items view.
 - [ ] Build category pages for must-know facts, OSI/TCP-IP, CLI reference, protocol facts, glossary, and exam traps.
-- [ ] Author vault content across all required categories.
 - [ ] Add links between vault items and related lesson content.
 - [ ] Add the soft "study before quiz" nudge where appropriate.
+- [ ] Seed representative sample content to validate both review systems before full curriculum authoring.
 
 ### Done When
-- [ ] Users can study due cards and keep long-term progress.
+- [ ] Users can study due cards from flashcard mode and from lesson-linked `Flash cards` entry points.
 - [ ] Vault content is searchable, bookmarkable, and accessible outside lesson progression.
 - [ ] Flashcards and vault both use stable local persistence.
 
-## Milestone 6: Exam Mode
+## Milestone 6: Domain 1 Content Package - Network Fundamentals
+**Objective:** Write and polish the full Domain 1 learning package across theory, simulations, practice labs, flash cards, and lesson quizzes.
+
+**Depends on:** Milestones 1 through 5.
+
+### Tasks
+- [ ] Review Domain 1 scope, lesson ordering, and dependency flow against the PRD before authoring starts.
+- [ ] Re-read `docs/buildingLesson.md` before implementing Domain 1 lesson surfaces so the layout, tab structure, and centered composition stay aligned.
+- [ ] Write all Domain 1 lesson theory modules as deep-dive structured content.
+- [ ] Add callouts, CLI spotlights, visual blocks, concept checkpoints, and summary cards for every Domain 1 lesson.
+- [ ] Review every Domain 1 lesson for UI/UX correctness, readability, pacing, and theme correctness inside the reader.
+- [ ] Build a bespoke simulation for every Domain 1 lesson.
+- [ ] Build a dedicated practice lab for every Domain 1 lesson.
+- [ ] Prepare lesson-linked flashcard review content or deck entry points for every Domain 1 lesson so the `Flash cards` tab is populated.
+- [ ] Author a dedicated lesson quiz for every Domain 1 lesson with the required PRD question mix and explanations.
+- [ ] Author the Domain 1 domain quiz.
+- [ ] Produce Domain 1 summary-card outputs and review-source content that can feed flashcards and vault references.
+- [ ] Validate the full Domain 1 progression from Domains Directory to Lesson Detail View to Theory -> Simulation -> Practice Lab -> Flash cards -> Lesson Quiz -> unlock.
+
+### Done When
+- [ ] Domain 1 is fully playable from first lesson through domain completion.
+- [ ] Every Domain 1 lesson has complete Theory, Simulation, Practice Lab, Flash cards, and Lesson Quiz tab content.
+- [ ] Domain 1 content quality, UI/UX quality, and theme fidelity meet the PRD standard.
+
+## Milestone 7: Domain 2 Content Package - Network Access
+**Objective:** Write and polish the full Domain 2 learning package across theory, simulations, practice labs, flash cards, and lesson quizzes.
+
+**Depends on:** Milestones 1 through 5.
+
+### Tasks
+- [ ] Review Domain 2 scope, lesson ordering, and dependency flow against the PRD before authoring starts.
+- [ ] Re-read `docs/buildingLesson.md` before implementing Domain 2 lesson surfaces so the layout, tab structure, and centered composition stay aligned.
+- [ ] Write all Domain 2 lesson theory modules as deep-dive structured content.
+- [ ] Add callouts, CLI spotlights, visual blocks, concept checkpoints, and summary cards for every Domain 2 lesson.
+- [ ] Review every Domain 2 lesson for UI/UX correctness, readability, pacing, and theme correctness inside the reader.
+- [ ] Build a bespoke simulation for every Domain 2 lesson.
+- [ ] Build a dedicated practice lab for every Domain 2 lesson.
+- [ ] Prepare lesson-linked flashcard review content or deck entry points for every Domain 2 lesson so the `Flash cards` tab is populated.
+- [ ] Author a dedicated lesson quiz for every Domain 2 lesson with the required PRD question mix and explanations.
+- [ ] Author the Domain 2 domain quiz.
+- [ ] Produce Domain 2 summary-card outputs and review-source content that can feed flashcards and vault references.
+- [ ] Validate the full Domain 2 progression from Domains Directory to Lesson Detail View to Theory -> Simulation -> Practice Lab -> Flash cards -> Lesson Quiz -> unlock.
+
+### Done When
+- [ ] Domain 2 is fully playable from first lesson through domain completion.
+- [ ] Every Domain 2 lesson has complete Theory, Simulation, Practice Lab, Flash cards, and Lesson Quiz tab content.
+- [ ] Domain 2 content quality, UI/UX quality, and theme fidelity meet the PRD standard.
+
+## Milestone 8: Domain 3 Content Package - IP Connectivity
+**Objective:** Write and polish the full Domain 3 learning package across theory, simulations, practice labs, flash cards, and lesson quizzes.
+
+**Depends on:** Milestones 1 through 5.
+
+### Tasks
+- [ ] Review Domain 3 scope, lesson ordering, and dependency flow against the PRD before authoring starts.
+- [ ] Re-read `docs/buildingLesson.md` before implementing Domain 3 lesson surfaces so the layout, tab structure, and centered composition stay aligned.
+- [ ] Write all Domain 3 lesson theory modules as deep-dive structured content.
+- [ ] Add callouts, CLI spotlights, visual blocks, concept checkpoints, and summary cards for every Domain 3 lesson.
+- [ ] Review every Domain 3 lesson for UI/UX correctness, readability, pacing, and theme correctness inside the reader.
+- [ ] Build a bespoke simulation for every Domain 3 lesson.
+- [ ] Build a dedicated practice lab for every Domain 3 lesson.
+- [ ] Prepare lesson-linked flashcard review content or deck entry points for every Domain 3 lesson so the `Flash cards` tab is populated.
+- [ ] Author a dedicated lesson quiz for every Domain 3 lesson with the required PRD question mix and explanations.
+- [ ] Author the Domain 3 domain quiz.
+- [ ] Produce Domain 3 summary-card outputs and review-source content that can feed flashcards and vault references.
+- [ ] Validate the full Domain 3 progression from Domains Directory to Lesson Detail View to Theory -> Simulation -> Practice Lab -> Flash cards -> Lesson Quiz -> unlock.
+
+### Done When
+- [ ] Domain 3 is fully playable from first lesson through domain completion.
+- [ ] Every Domain 3 lesson has complete Theory, Simulation, Practice Lab, Flash cards, and Lesson Quiz tab content.
+- [ ] Domain 3 content quality, UI/UX quality, and theme fidelity meet the PRD standard.
+
+## Milestone 9: Domain 4 Content Package - IP Services
+**Objective:** Write and polish the full Domain 4 learning package across theory, simulations, practice labs, flash cards, and lesson quizzes.
+
+**Depends on:** Milestones 1 through 5.
+
+### Tasks
+- [ ] Review Domain 4 scope, lesson ordering, and dependency flow against the PRD before authoring starts.
+- [ ] Re-read `docs/buildingLesson.md` before implementing Domain 4 lesson surfaces so the layout, tab structure, and centered composition stay aligned.
+- [ ] Write all Domain 4 lesson theory modules as deep-dive structured content.
+- [ ] Add callouts, CLI spotlights, visual blocks, concept checkpoints, and summary cards for every Domain 4 lesson.
+- [ ] Review every Domain 4 lesson for UI/UX correctness, readability, pacing, and theme correctness inside the reader.
+- [ ] Build a bespoke simulation for every Domain 4 lesson.
+- [ ] Build a dedicated practice lab for every Domain 4 lesson.
+- [ ] Prepare lesson-linked flashcard review content or deck entry points for every Domain 4 lesson so the `Flash cards` tab is populated.
+- [ ] Author a dedicated lesson quiz for every Domain 4 lesson with the required PRD question mix and explanations.
+- [ ] Author the Domain 4 domain quiz.
+- [ ] Produce Domain 4 summary-card outputs and review-source content that can feed flashcards and vault references.
+- [ ] Validate the full Domain 4 progression from Domains Directory to Lesson Detail View to Theory -> Simulation -> Practice Lab -> Flash cards -> Lesson Quiz -> unlock.
+
+### Done When
+- [ ] Domain 4 is fully playable from first lesson through domain completion.
+- [ ] Every Domain 4 lesson has complete Theory, Simulation, Practice Lab, Flash cards, and Lesson Quiz tab content.
+- [ ] Domain 4 content quality, UI/UX quality, and theme fidelity meet the PRD standard.
+
+## Milestone 10: Domain 5 Content Package - Security Fundamentals
+**Objective:** Write and polish the full Domain 5 learning package across theory, simulations, practice labs, flash cards, and lesson quizzes.
+
+**Depends on:** Milestones 1 through 5.
+
+### Tasks
+- [ ] Review Domain 5 scope, lesson ordering, and dependency flow against the PRD before authoring starts.
+- [ ] Re-read `docs/buildingLesson.md` before implementing Domain 5 lesson surfaces so the layout, tab structure, and centered composition stay aligned.
+- [ ] Write all Domain 5 lesson theory modules as deep-dive structured content.
+- [ ] Add callouts, CLI spotlights, visual blocks, concept checkpoints, and summary cards for every Domain 5 lesson.
+- [ ] Review every Domain 5 lesson for UI/UX correctness, readability, pacing, and theme correctness inside the reader.
+- [ ] Build a bespoke simulation for every Domain 5 lesson.
+- [ ] Build a dedicated practice lab for every Domain 5 lesson.
+- [ ] Prepare lesson-linked flashcard review content or deck entry points for every Domain 5 lesson so the `Flash cards` tab is populated.
+- [ ] Author a dedicated lesson quiz for every Domain 5 lesson with the required PRD question mix and explanations.
+- [ ] Author the Domain 5 domain quiz.
+- [ ] Produce Domain 5 summary-card outputs and review-source content that can feed flashcards and vault references.
+- [ ] Validate the full Domain 5 progression from Domains Directory to Lesson Detail View to Theory -> Simulation -> Practice Lab -> Flash cards -> Lesson Quiz -> unlock.
+
+### Done When
+- [ ] Domain 5 is fully playable from first lesson through domain completion.
+- [ ] Every Domain 5 lesson has complete Theory, Simulation, Practice Lab, Flash cards, and Lesson Quiz tab content.
+- [ ] Domain 5 content quality, UI/UX quality, and theme fidelity meet the PRD standard.
+
+## Milestone 11: Domain 6 Content Package - Automation & Programmability
+**Objective:** Write and polish the full Domain 6 learning package across theory, simulations, practice labs, flash cards, and lesson quizzes.
+
+**Depends on:** Milestones 1 through 5.
+
+### Tasks
+- [ ] Review Domain 6 scope, lesson ordering, and dependency flow against the PRD before authoring starts.
+- [ ] Re-read `docs/buildingLesson.md` before implementing Domain 6 lesson surfaces so the layout, tab structure, and centered composition stay aligned.
+- [ ] Write all Domain 6 lesson theory modules as deep-dive structured content.
+- [ ] Add callouts, CLI spotlights, visual blocks, concept checkpoints, and summary cards for every Domain 6 lesson.
+- [ ] Review every Domain 6 lesson for UI/UX correctness, readability, pacing, and theme correctness inside the reader.
+- [ ] Build a bespoke simulation for every Domain 6 lesson.
+- [ ] Build a dedicated practice lab for every Domain 6 lesson.
+- [ ] Prepare lesson-linked flashcard review content or deck entry points for every Domain 6 lesson so the `Flash cards` tab is populated.
+- [ ] Author a dedicated lesson quiz for every Domain 6 lesson with the required PRD question mix and explanations.
+- [ ] Author the Domain 6 domain quiz.
+- [ ] Produce Domain 6 summary-card outputs and review-source content that can feed flashcards and vault references.
+- [ ] Validate the full Domain 6 progression from Domains Directory to Lesson Detail View to Theory -> Simulation -> Practice Lab -> Flash cards -> Lesson Quiz -> unlock.
+
+### Done When
+- [ ] Domain 6 is fully playable from first lesson through domain completion.
+- [ ] Every Domain 6 lesson has complete Theory, Simulation, Practice Lab, Flash cards, and Lesson Quiz tab content.
+- [ ] Domain 6 content quality, UI/UX quality, and theme fidelity meet the PRD standard.
+
+## Milestone 12: Exam Mode
 **Objective:** Deliver the capstone assessment experience for completed domains.
 
-**Depends on:** Milestones 0 through 5, especially quiz and progression systems.
+**Depends on:** Milestones 0 through 11, especially quiz, progression, and completed domain content.
 
 ### Tasks
 - [ ] Define the exam session model separate from long-lived study progress.
@@ -200,33 +354,7 @@
 - [ ] Exam results clearly explain performance by domain.
 - [ ] Exam session behavior stays separate from persistent study state.
 
-## Milestone 7: Content Completion Across All Domains
-**Objective:** Expand from a Domain 1 MVP into a complete six-domain CCNA platform.
-
-**Depends on:** Milestones 0 through 6.
-
-### Tasks
-- [ ] Create a content production plan for Domains 2 through 6 across lessons, quizzes, labs, simulations, flashcards, and vault references.
-- [ ] Author Domain 2 content package.
-- [ ] Author Domain 3 content package.
-- [ ] Author Domain 4 content package.
-- [ ] Author Domain 5 content package.
-- [ ] Author Domain 6 content package.
-- [ ] Fill in lesson diagrams, CLI spotlights, checkpoints, and summary cards across all domains.
-- [ ] Fill in simulations across all domain topics that require them.
-- [ ] Fill in lab scenarios, objectives, and validation rules across all domains.
-- [ ] Fill in lesson and domain quiz coverage across all domains.
-- [ ] Expand flashcards and vault references to fully support all domains.
-- [ ] Expand exam question coverage across all domains.
-- [ ] Review lesson ordering and dependency correctness across the curriculum.
-- [ ] Run naming and terminology review to keep content aligned with the PRD.
-
-### Done When
-- [ ] All six domains are available in the product.
-- [ ] Every core learning system has multi-domain coverage.
-- [ ] Cross-domain content quality and terminology are consistent.
-
-## Milestone 8: Quality, Accessibility, And Launch Readiness
+## Milestone 13: Quality, Accessibility, And Launch Readiness
 **Objective:** Harden the experience for a reliable launch-quality release.
 
 **Depends on:** All previous milestones.
@@ -255,16 +383,21 @@
 
 ## Recommended Execution Sequence
 1. Milestone 0: Foundation And App Shell
-2. Milestone 1: Domain Navigation And Lesson Reader
+2. Milestone 1: Learning Structures, UI/UX, And Theme Fidelity
 3. Milestone 2: Quiz Engine And Unlock Logic
-4. Milestone 3: Simulation MVP
-5. Milestone 4: Hands-On Lab MVP
-6. Milestone 5: Flashcards And Vault
-7. Milestone 6: Exam Mode
-8. Milestone 7: Content Completion Across All Domains
-9. Milestone 8: Quality, Accessibility, And Launch Readiness
+4. Milestone 3: Simulation Platform
+5. Milestone 4: Hands-On Lab Platform
+6. Milestone 5: Flashcards And Vault Platform
+7. Milestone 6: Domain 1 Content Package - Network Fundamentals
+8. Milestone 7: Domain 2 Content Package - Network Access
+9. Milestone 8: Domain 3 Content Package - IP Connectivity
+10. Milestone 9: Domain 4 Content Package - IP Services
+11. Milestone 10: Domain 5 Content Package - Security Fundamentals
+12. Milestone 11: Domain 6 Content Package - Automation & Programmability
+13. Milestone 12: Exam Mode
+14. Milestone 13: Quality, Accessibility, And Launch Readiness
 
 ## Suggested Release Gates
-- **Vertical Slice Release:** Milestones 0 through 4 with a subset of Domain 1 fully playable.
-- **MVP Release:** Milestones 0 through 6 with Domain 1 complete and supporting review systems live.
-- **PRD-Complete Release:** Milestones 0 through 8 across all six domains.
+- **Vertical Slice Release:** Milestones 0 through 6 with Domain 1 fully playable end to end.
+- **MVP Release:** Milestones 0 through 11 with all six domains complete and the supporting review systems live.
+- **PRD-Complete Release:** Milestones 0 through 13 across all six domains with exam mode and launch hardening complete.

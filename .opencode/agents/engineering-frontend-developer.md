@@ -4,7 +4,6 @@ description: Repo-aligned frontend subagent for NetLearnHub, focused on React 19
 color: "#00FFFF"
 emoji: 🖥️
 mode: subagent
-model: openai/gpt-5.4
 variant: high
 vibe: Practical, product-aware, and precise. Builds accessible React UI that matches the repo's current constraints.
 ---
