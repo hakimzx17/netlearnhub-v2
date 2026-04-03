@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { ClipboardList, FlaskConical, Layers, PlayCircle } from 'lucide-react';
+import { ClipboardList, FlaskConical, Layers } from 'lucide-react';
 
 import { TheoryTab } from './TheoryTab';
+import { SimulationTabSurface } from '../simulation/SimulationTabSurface';
 import { QuizShell } from '../quiz/QuizShell';
 import { getLessonQuiz } from '../../content/quizzes';
 import type { LessonDefinition } from '../../content/types';
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 
 type TabId = 'theory' | 'simulation' | 'lab' | 'flashcards' | 'quiz';
 
@@ -16,6 +18,7 @@ type LessonTabContentProps = {
 
 export function LessonTabContent({ activeTab, lesson, lessonId }: LessonTabContentProps) {
   const quizQuestions = getLessonQuiz(lessonId);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
     <AnimatePresence mode="wait">
@@ -24,20 +27,14 @@ export function LessonTabContent({ activeTab, lesson, lessonId }: LessonTabConte
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 8 }}
         initial={{ opacity: 0, y: 8 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
         className="tab-panel"
         id={`tab-panel-${activeTab}`}
         role="tabpanel"
       >
         {activeTab === 'theory' && <TheoryTab lesson={lesson} lessonId={lessonId} />}
         {activeTab === 'simulation' && (
-          <div className="tab-placeholder">
-            <div className="tab-placeholder__icon"><PlayCircle size={32} /></div>
-            <h2 className="tab-placeholder__title">Simulation</h2>
-            <p className="tab-placeholder__description">
-              An animated simulation for this lesson will appear here. Simulations require a desktop browser and are built per-lesson.
-            </p>
-          </div>
+          <SimulationTabSurface lessonId={lessonId} lessonTitle={lesson.title} />
         )}
         {activeTab === 'lab' && (
           <div className="tab-placeholder">

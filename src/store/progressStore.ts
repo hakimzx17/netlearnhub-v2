@@ -43,6 +43,7 @@ type ProgressState = {
   nextExamLabel: string;
   quizAttempts: Record<string, QuizAttempt[]>;
   markLessonAccessed: (lessonId: string) => void;
+  markSimulationViewed: (lessonId: string) => void;
   recordQuizAttempt: (lessonId: string, attempt: QuizAttempt) => void;
   applyLessonUpdates: (updates: Record<string, Partial<LessonProgress>>) => void;
   applyDomainUpdates: (updates: Record<string, { status?: string; completionPercent?: number; completedLessons?: number }>) => void;
@@ -117,7 +118,7 @@ function buildSeedDomains(): Record<DomainId, DomainProgress> {
 
 export function createDefaultProgressState(): Omit<
   ProgressState,
-  'hydrateVisit' | 'markLessonAccessed' | 'recordQuizAttempt' | 'applyLessonUpdates' | 'applyDomainUpdates' | 'resetProgress'
+  'hydrateVisit' | 'markLessonAccessed' | 'markSimulationViewed' | 'recordQuizAttempt' | 'applyLessonUpdates' | 'applyDomainUpdates' | 'resetProgress'
 > {
   return {
     lessons: buildSeedLessons(),
@@ -207,6 +208,45 @@ export const useProgressStore = create<ProgressState>()(
           const currentLesson = state.lessons[lessonId] ?? buildFallbackLesson(lessonId);
           const nextLesson: LessonProgress = {
             ...currentLesson,
+            status: currentLesson.status === 'available' ? 'in-progress' : currentLesson.status,
+            lastAccessed: new Date().toISOString(),
+          };
+
+          return {
+            lastLessonId: lessonId,
+            lessons: {
+              ...state.lessons,
+              [lessonId]: nextLesson,
+            },
+            domains: {
+              ...state.domains,
+              [nextLesson.domainId]: {
+                ...state.domains[nextLesson.domainId],
+                status:
+                  state.domains[nextLesson.domainId].status === 'not-started'
+                    ? 'in-progress'
+                    : state.domains[nextLesson.domainId].status,
+              },
+            },
+          };
+        }),
+      markSimulationViewed: (lessonId) =>
+        set((state) => {
+          const currentLesson = state.lessons[lessonId] ?? buildFallbackLesson(lessonId);
+
+          if (currentLesson.status === 'locked') {
+            return state;
+          }
+
+          const nextProgressPercent =
+            currentLesson.status === 'passed'
+              ? 100
+              : Math.max(currentLesson.progressPercent, currentLesson.labComplete ? 70 : 45);
+
+          const nextLesson: LessonProgress = {
+            ...currentLesson,
+            simViewed: true,
+            progressPercent: nextProgressPercent,
             status: currentLesson.status === 'available' ? 'in-progress' : currentLesson.status,
             lastAccessed: new Date().toISOString(),
           };

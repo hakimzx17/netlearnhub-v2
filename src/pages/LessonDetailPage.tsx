@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BookOpen, ClipboardList, FlaskConical, Layers, PlayCircle } from 'lucide-react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 
 import { getDomainById, getDomainLessonPreviews } from '../content/domains';
 import { getLessonById } from '../content/lessons';
@@ -33,7 +33,7 @@ function getSidebarItemStatus(lessonId: string, currentIndex: number, lessonStat
 
 export function LessonDetailPage() {
   const { id = '' } = useParams<{ id: string }>();
-  const [activeTab, setActiveTab] = useState<TabId>('theory');
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const lesson = getLessonById(id);
   const lessonProgress = useProgressStore((state: { lessons: Record<string, LessonProgress> }) => state.lessons);
@@ -49,8 +49,22 @@ export function LessonDetailPage() {
     status: getSidebarItemStatus(preview.id, index, lessonProgress),
   }));
 
+  const tabParam = searchParams.get('tab');
+  const activeTab: TabId =
+    tabParam === 'simulation' || tabParam === 'lab' || tabParam === 'flashcards' || tabParam === 'quiz'
+      ? tabParam
+      : 'theory';
+
   function handleTabChange(tabId: TabId) {
-    setActiveTab(tabId);
+    const nextSearchParams = new URLSearchParams(searchParams);
+
+    if (tabId === 'theory') {
+      nextSearchParams.delete('tab');
+    } else {
+      nextSearchParams.set('tab', tabId);
+    }
+
+    setSearchParams(nextSearchParams, { replace: true });
   }
 
   // Mark lesson as accessed when the page loads

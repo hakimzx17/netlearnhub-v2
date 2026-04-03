@@ -6,10 +6,11 @@ import { DomainPage } from './pages/DomainPage';
 import { DomainsDirectoryPage } from './pages/DomainsDirectoryPage';
 import { DomainQuizPage } from './pages/DomainQuizPage';
 import { LessonQuizPage } from './pages/LessonQuizPage';
-import { ExamPage, ExamResultsPage, ExamSessionPage, FlashcardsPage, FlashcardSessionPage, LabPage, SimulationPage, VaultCategoryPage, VaultPage } from './pages/RoutePlaceholderPages';
+import { ExamPage, ExamResultsPage, ExamSessionPage, FlashcardsPage, FlashcardSessionPage, LabPage, VaultCategoryPage, VaultPage } from './pages/RoutePlaceholderPages';
 import { LessonDetailPage } from './pages/LessonDetailPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { SimulationPage } from './pages/SimulationPage';
 
 export const router = createBrowserRouter([
   {
