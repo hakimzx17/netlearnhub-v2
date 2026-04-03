@@ -40,25 +40,6 @@ export function LabPage() {
   );
 }
 
-export function LessonQuizPage() {
-  const { id = 'lesson' } = useParams();
-
-  return (
-    <RoutePlaceholderPage
-      actionLabel="Review lesson"
-      actionTo={`/lesson/${id}`}
-      checklist={[
-        'Quiz route exists for every lesson URL today.',
-        'Unlock logic and scored attempts land in Milestone 2.',
-        'Results history already has a home in the persisted progress store.',
-      ]}
-      description="Milestone 0 wires the route and persistent study shell so the lesson loop is already navigable."
-      eyebrow="Lesson quiz route"
-      title="Lesson quiz placeholder"
-    />
-  );
-}
-
 export function DomainQuizPage() {
   const { id = 'domain-1' } = useParams();
 

@@ -2,6 +2,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import { ClipboardList, FlaskConical, Layers, PlayCircle } from 'lucide-react';
 
 import { TheoryTab } from './TheoryTab';
+import { QuizShell } from '../quiz/QuizShell';
+import { getLessonQuiz } from '../../content/quizzes';
 import type { LessonDefinition } from '../../content/types';
 
 type TabId = 'theory' | 'simulation' | 'lab' | 'flashcards' | 'quiz';
@@ -13,6 +15,8 @@ type LessonTabContentProps = {
 };
 
 export function LessonTabContent({ activeTab, lesson, lessonId }: LessonTabContentProps) {
+  const quizQuestions = getLessonQuiz(lessonId);
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -54,13 +58,24 @@ export function LessonTabContent({ activeTab, lesson, lessonId }: LessonTabConte
           </div>
         )}
         {activeTab === 'quiz' && (
-          <div className="tab-placeholder">
-            <div className="tab-placeholder__icon"><ClipboardList size={32} /></div>
-            <h2 className="tab-placeholder__title">Lesson Quiz</h2>
-            <p className="tab-placeholder__description">
-              The lesson quiz (10 questions, 80% to pass) will appear here. Passing unlocks the next lesson in this domain.
-            </p>
-          </div>
+          quizQuestions.length > 0 ? (
+            <QuizShell
+              lessonId={lessonId}
+              domainId={lesson.domainId}
+              questions={quizQuestions}
+              onComplete={() => {
+                // Return to theory tab after quiz
+              }}
+            />
+          ) : (
+            <div className="tab-placeholder">
+              <div className="tab-placeholder__icon"><ClipboardList size={32} /></div>
+              <h2 className="tab-placeholder__title">Lesson Quiz</h2>
+              <p className="tab-placeholder__description">
+                The lesson quiz (10 questions, 80% to pass) will appear here. Passing unlocks the next lesson in this domain.
+              </p>
+            </div>
+          )
         )}
       </motion.div>
     </AnimatePresence>

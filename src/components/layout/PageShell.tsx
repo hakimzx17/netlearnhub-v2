@@ -24,10 +24,7 @@ export function PageShell() {
 
   return (
     <div className="app-shell">
-      <div className="app-shell__background" aria-hidden="true">
-        <div className="app-shell__glow app-shell__glow--top" />
-        <div className="app-shell__glow app-shell__glow--side" />
-      </div>
+      <div className="app-shell__background" aria-hidden="true" />
 
       <Sidebar
         avatarMonogram={name ? getInitials(name) : 'GP'}

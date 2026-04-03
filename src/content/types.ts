@@ -142,3 +142,42 @@ export type QuizMetadata = {
   passThreshold: number;
   title: string;
 };
+
+// ---------------------------------------------------------------------------
+// Quiz question models
+// ---------------------------------------------------------------------------
+
+export type QuestionType = 'single-mcq' | 'multi-mcq' | 'true-false' | 'fill-blank';
+
+export type QuizOption = {
+  id: string;
+  text: string;
+};
+
+export type QuizQuestion = {
+  id: string;
+  type: QuestionType;
+  stem: string;
+  options?: QuizOption[];
+  correct: string | string[];
+  explanation: string;
+  lessonId: string;
+  domainId: DomainId;
+};
+
+export type QuizAttempt = {
+  quizId: string;
+  score: number;
+  attemptDate: string;
+  missedQuestionIds: string[];
+};
+
+export type QuizState = {
+  questions: QuizQuestion[];
+  currentIndex: number;
+  answers: Record<string, string | string[]>;
+  startTime: number;
+  elapsedSeconds: number;
+  isSubmitted: boolean;
+  isComplete: boolean;
+};

@@ -3,6 +3,7 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 
 import { domains, getDomainLessonPreviews, getLessonPreviewById } from '../content/domains';
 import type { DomainId } from '../content/domains';
+import type { QuizAttempt } from '../content/types';
 
 export type LessonStatus = 'locked' | 'available' | 'in-progress' | 'passed' | 'failed';
 export type DomainStatus = 'not-started' | 'in-progress' | 'complete';
@@ -19,6 +20,7 @@ export type LessonProgress = {
   labComplete: boolean;
   simViewed: boolean;
   lastAccessed?: string;
+  quizHistory?: QuizAttempt[];
 };
 
 export type DomainProgress = {
@@ -39,7 +41,11 @@ type ProgressState = {
   achievements: string[];
   lastLessonId: string;
   nextExamLabel: string;
+  quizAttempts: Record<string, QuizAttempt[]>;
   markLessonAccessed: (lessonId: string) => void;
+  recordQuizAttempt: (lessonId: string, attempt: QuizAttempt) => void;
+  applyLessonUpdates: (updates: Record<string, Partial<LessonProgress>>) => void;
+  applyDomainUpdates: (updates: Record<string, { status?: string; completionPercent?: number; completedLessons?: number }>) => void;
   hydrateVisit: () => void;
   resetProgress: () => void;
 };
@@ -111,7 +117,7 @@ function buildSeedDomains(): Record<DomainId, DomainProgress> {
 
 export function createDefaultProgressState(): Omit<
   ProgressState,
-  'hydrateVisit' | 'markLessonAccessed' | 'resetProgress'
+  'hydrateVisit' | 'markLessonAccessed' | 'recordQuizAttempt' | 'applyLessonUpdates' | 'applyDomainUpdates' | 'resetProgress'
 > {
   return {
     lessons: buildSeedLessons(),
@@ -124,6 +130,7 @@ export function createDefaultProgressState(): Omit<
     achievements: ['first-lesson-complete', 'first-domain-complete'],
     lastLessonId: 'd2-stp',
     nextExamLabel: 'In 3 days',
+    quizAttempts: {},
   };
 }
 
@@ -221,6 +228,67 @@ export const useProgressStore = create<ProgressState>()(
               },
             },
           };
+        }),
+      recordQuizAttempt: (lessonId, attempt) =>
+        set((state) => {
+          const currentLesson = state.lessons[lessonId];
+
+          if (!currentLesson) {
+            return state;
+          }
+
+          const existingHistory = state.quizAttempts[lessonId] ?? [];
+          const newHistory = [...existingHistory, attempt];
+
+          return {
+            lessons: {
+              ...state.lessons,
+              [lessonId]: {
+                ...currentLesson,
+                quizScore: attempt.score,
+                quizAttempts: currentLesson.quizAttempts + 1,
+                quizHistory: newHistory,
+              },
+            },
+            quizAttempts: {
+              ...state.quizAttempts,
+              [lessonId]: newHistory,
+            },
+          };
+        }),
+      applyLessonUpdates: (updates) =>
+        set((state) => {
+          const updatedLessons = { ...state.lessons };
+
+          for (const [lessonId, update] of Object.entries(updates)) {
+            const current = updatedLessons[lessonId];
+
+            if (current) {
+              updatedLessons[lessonId] = { ...current, ...update };
+            }
+          }
+
+          return { lessons: updatedLessons };
+        }),
+      applyDomainUpdates: (updates) =>
+        set((state) => {
+          const updatedDomains = { ...state.domains };
+
+          for (const [domainId, update] of Object.entries(updates)) {
+            const current = updatedDomains[domainId as DomainId];
+
+            if (current) {
+              updatedDomains[domainId as DomainId] = {
+                ...current,
+                ...update,
+                status: (update.status as DomainStatus) ?? current.status,
+                completionPercent: update.completionPercent ?? current.completionPercent,
+                completedLessons: update.completedLessons ?? current.completedLessons,
+              };
+            }
+          }
+
+          return { domains: updatedDomains };
         }),
       resetProgress: () => set(createDefaultProgressState()),
     }),
