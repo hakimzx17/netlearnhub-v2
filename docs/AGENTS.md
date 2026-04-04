@@ -17,6 +17,7 @@ Read it before making changes.
 - The current UI is React + TypeScript with CSS variables in `src/styles.css`.
 - React Router now includes the lesson-detail experience plus real lesson quiz, simulation, and lab flows; later-product areas such as flashcards, vault, exam mode, and broader curriculum content are still ahead of the repo.
 - Zustand persistence is in place for guest profile and progress state, including quiz, simulation, and lab progression.
+- `.github/workflows/` includes the GitHub Pages deployment workflow for the hosted demo.
 - `project-specs/` now exists and stores milestone setup specs used during implementation.
 - Milestones 1 through 4 are implemented in repo reality; later milestones remain partially or fully aspirational.
 - There is no Prettier config.
@@ -45,6 +46,8 @@ Read it before making changes.
 - Current dev server port: `3000`
 - Current build script: `npm run build`
 - Current build behavior: runs `npm run typecheck` and then `vite build`
+- GitHub Pages build: `npm run build:pages`
+- GitHub Pages build behavior: runs `npm run typecheck` and then `vite build --base /netlearnhub-v2/`
 - Current lint script: `npm run lint`
 - Current lint behavior: runs `eslint src vite.config.ts`
 - Current typecheck command: `npm run typecheck`

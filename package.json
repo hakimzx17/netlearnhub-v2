@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run typecheck && vite build",
+    "build:pages": "npm run typecheck && vite build --base /netlearnhub-v2/",
     "preview": "vite preview",
     "clean": "rimraf dist coverage",
     "typecheck": "tsc --noEmit",

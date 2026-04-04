@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, createHashRouter } from 'react-router-dom';
 
 import { PageShell } from './components/layout/PageShell';
 import { DashboardPage } from './pages/DashboardPage';
@@ -13,7 +13,7 @@ import { NotFoundPage } from './pages/NotFoundPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { SimulationPage } from './pages/SimulationPage';
 
-export const router = createBrowserRouter([
+const routeConfig = [
   {
     path: '/',
     element: <PageShell />,
@@ -88,4 +88,11 @@ export const router = createBrowserRouter([
       },
     ],
   },
-]);
+];
+
+const isGitHubPagesHost =
+  typeof window !== 'undefined' && window.location.hostname === 'hakimzx17.github.io';
+
+export const router = isGitHubPagesHost
+  ? createHashRouter(routeConfig)
+  : createBrowserRouter(routeConfig);
