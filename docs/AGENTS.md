@@ -13,11 +13,12 @@ Read it before making changes.
 
 ## Repo Reality
 - The checked-in app now boots through Vite and renders from `src/main.tsx`.
-- `src/` exists and currently contains app shell, dashboard, route placeholders, persisted stores, and baseline tests.
+- `src/` now contains the app shell, dashboard, real lesson UI, quiz engine, simulation platform, lab platform, persisted stores, authored sample content, and frontend tests.
 - The current UI is React + TypeScript with CSS variables in `src/styles.css`.
-- React Router routes already match the PRD information architecture at a placeholder level.
-- Zustand persistence is in place for guest profile and progress state.
-- The curriculum content systems are still mostly placeholders; Milestone 1 and later fill those in.
+- React Router now includes the lesson-detail experience plus real lesson quiz, simulation, and lab flows; later-product areas such as flashcards, vault, exam mode, and broader curriculum content are still ahead of the repo.
+- Zustand persistence is in place for guest profile and progress state, including quiz, simulation, and lab progression.
+- `project-specs/` now exists and stores milestone setup specs used during implementation.
+- Milestones 1 through 4 are implemented in repo reality; later milestones remain partially or fully aspirational.
 - There is no Prettier config.
 - `server.js` still exists but is no longer the primary local dev workflow.
 - The PRD is ahead of the current implementation; build incrementally from what exists.
@@ -143,6 +144,8 @@ Read it before making changes.
 - Add comments only when the code is not self-explanatory.
 - Prefer comments that explain why, not what.
 - Keep README and docs aligned with actual behavior.
+- Update `docs/tasks.md` in the same working pass when completed tasks or milestone outcomes change the project status.
+- If the user introduces a lasting workflow note or major structural convention, codify it in `docs/AGENTS.md` as part of the same change.
 - If you add tests, linting, or build steps, document them here.
 - Do not edit `dist/` or generated output unless the task specifically requires it.
 - Do not commit secrets.
@@ -153,4 +156,5 @@ Read it before making changes.
 - Inspect nearby code before introducing new patterns.
 - Verify commands honestly.
 - Call out placeholder routes and incomplete milestone work instead of pretending features exist.
+- Keep `docs/tasks.md` checkboxes synchronized with completed work instead of leaving finished milestones unchecked.
 - When you add new repo conventions, codify them in `AGENTS.md`.

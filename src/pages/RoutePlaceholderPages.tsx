@@ -21,25 +21,6 @@ export function SimulationPage() {
   );
 }
 
-export function LabPage() {
-  const { id = 'lesson' } = useParams();
-
-  return (
-    <RoutePlaceholderPage
-      actionLabel="Back to lesson"
-      actionTo={`/lesson/${id}`}
-      checklist={[
-        'Lab route is active and linked into the lesson flow.',
-        'Desktop-first shell will arrive in Milestone 4.',
-        'Progress persistence is already ready for lab completion state.',
-      ]}
-      description="This is the future CLI and topology canvas route. Milestone 0 only establishes the navigation and page shell."
-      eyebrow="Lab route"
-      title="Hands-on lab placeholder"
-    />
-  );
-}
-
 export function DomainQuizPage() {
   const { id = 'domain-1' } = useParams();
 

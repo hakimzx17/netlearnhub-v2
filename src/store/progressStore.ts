@@ -44,6 +44,7 @@ type ProgressState = {
   quizAttempts: Record<string, QuizAttempt[]>;
   markLessonAccessed: (lessonId: string) => void;
   markSimulationViewed: (lessonId: string) => void;
+  markLabComplete: (lessonId: string) => void;
   recordQuizAttempt: (lessonId: string, attempt: QuizAttempt) => void;
   applyLessonUpdates: (updates: Record<string, Partial<LessonProgress>>) => void;
   applyDomainUpdates: (updates: Record<string, { status?: string; completionPercent?: number; completedLessons?: number }>) => void;
@@ -74,14 +75,13 @@ function buildSeedLessons(): Record<string, LessonProgress> {
     'd2-inter-vlan-routing': { status: 'passed', progressPercent: 100, quizScore: 80, quizAttempts: 1, labComplete: true, simViewed: true },
     'd2-stp': { status: 'in-progress', progressPercent: 60, quizAttempts: 0, labComplete: false, simViewed: true },
     'd2-etherchannel': { status: 'available', progressPercent: 0, quizAttempts: 0, labComplete: false, simViewed: false },
-    'd3-routing-concepts': { status: 'available', progressPercent: 0, quizAttempts: 0, labComplete: false, simViewed: false },
-    'd4-nat': { status: 'available', progressPercent: 0, quizAttempts: 0, labComplete: false, simViewed: false },
-    'd5-threat-landscape': { status: 'available', progressPercent: 0, quizAttempts: 0, labComplete: false, simViewed: false },
-    'd6-controller-based-networking': { status: 'available', progressPercent: 0, quizAttempts: 0, labComplete: false, simViewed: false },
   };
+
+  let previousDomainComplete = true;
 
   for (const domain of domains) {
     const previews = getDomainLessonPreviews(domain.id);
+    const domainInitiallyUnlocked = previousDomainComplete;
 
     previews.forEach((lesson, index) => {
       const seed = seededProgress[lesson.id];
@@ -91,7 +91,7 @@ function buildSeedLessons(): Record<string, LessonProgress> {
         domainId: lesson.domainId,
         title: lesson.title,
         moduleLabel: lesson.moduleLabel,
-        status: seed?.status ?? (index === 0 ? 'available' : 'locked'),
+        status: seed?.status ?? (index === 0 && domainInitiallyUnlocked ? 'available' : 'locked'),
         progressPercent: seed?.progressPercent ?? 0,
         quizScore: seed?.quizScore,
         quizAttempts: seed?.quizAttempts ?? 0,
@@ -100,6 +100,8 @@ function buildSeedLessons(): Record<string, LessonProgress> {
         lastAccessed: lesson.id === 'd2-stp' ? new Date().toISOString() : undefined,
       };
     });
+
+    previousDomainComplete = previews.every((lesson) => seededProgress[lesson.id]?.status === 'passed');
   }
 
   return lessons;
@@ -109,7 +111,7 @@ function buildSeedDomains(): Record<DomainId, DomainProgress> {
   return {
     'domain-1': { status: 'complete', completionPercent: 100, completedLessons: 12, totalLessons: 12 },
     'domain-2': { status: 'in-progress', completionPercent: 80, completedLessons: 8, totalLessons: 10 },
-    'domain-3': { status: 'in-progress', completionPercent: 30, completedLessons: 3, totalLessons: 11 },
+    'domain-3': { status: 'not-started', completionPercent: 0, completedLessons: 0, totalLessons: 11 },
     'domain-4': { status: 'not-started', completionPercent: 0, completedLessons: 0, totalLessons: 8 },
     'domain-5': { status: 'not-started', completionPercent: 0, completedLessons: 0, totalLessons: 9 },
     'domain-6': { status: 'not-started', completionPercent: 0, completedLessons: 0, totalLessons: 6 },
@@ -118,7 +120,7 @@ function buildSeedDomains(): Record<DomainId, DomainProgress> {
 
 export function createDefaultProgressState(): Omit<
   ProgressState,
-  'hydrateVisit' | 'markLessonAccessed' | 'markSimulationViewed' | 'recordQuizAttempt' | 'applyLessonUpdates' | 'applyDomainUpdates' | 'resetProgress'
+  'hydrateVisit' | 'markLessonAccessed' | 'markSimulationViewed' | 'markLabComplete' | 'recordQuizAttempt' | 'applyLessonUpdates' | 'applyDomainUpdates' | 'resetProgress'
 > {
   return {
     lessons: buildSeedLessons(),
@@ -246,6 +248,45 @@ export const useProgressStore = create<ProgressState>()(
           const nextLesson: LessonProgress = {
             ...currentLesson,
             simViewed: true,
+            progressPercent: nextProgressPercent,
+            status: currentLesson.status === 'available' ? 'in-progress' : currentLesson.status,
+            lastAccessed: new Date().toISOString(),
+          };
+
+          return {
+            lastLessonId: lessonId,
+            lessons: {
+              ...state.lessons,
+              [lessonId]: nextLesson,
+            },
+            domains: {
+              ...state.domains,
+              [nextLesson.domainId]: {
+                ...state.domains[nextLesson.domainId],
+                status:
+                  state.domains[nextLesson.domainId].status === 'not-started'
+                    ? 'in-progress'
+                    : state.domains[nextLesson.domainId].status,
+              },
+            },
+          };
+        }),
+      markLabComplete: (lessonId) =>
+        set((state) => {
+          const currentLesson = state.lessons[lessonId] ?? buildFallbackLesson(lessonId);
+
+          if (currentLesson.status === 'locked') {
+            return state;
+          }
+
+          const nextProgressPercent =
+            currentLesson.status === 'passed'
+              ? 100
+              : Math.max(currentLesson.progressPercent, currentLesson.simViewed ? 70 : 60);
+
+          const nextLesson: LessonProgress = {
+            ...currentLesson,
+            labComplete: true,
             progressPercent: nextProgressPercent,
             status: currentLesson.status === 'available' ? 'in-progress' : currentLesson.status,
             lastAccessed: new Date().toISOString(),

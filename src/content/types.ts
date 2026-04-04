@@ -110,15 +110,126 @@ export type SimulationMetadata = {
 
 export type LabObjective = {
   id: string;
+  title: string;
   description: string;
+  validation: LabObjectiveValidation;
 };
 
-export type LabMetadata = {
+export type LabNodeType = 'router' | 'switch-l2' | 'switch-l3' | 'pc' | 'server' | 'firewall' | 'cloud';
+
+export type LabLinkType = 'copper' | 'fiber' | 'serial';
+
+export type LabTopologyNode = {
+  id: string;
+  label: string;
+  type: LabNodeType;
+  x: number;
+  y: number;
+  note: string;
+};
+
+export type LabTopologyLink = {
+  id: string;
+  sourceId: string;
+  targetId: string;
+  type: LabLinkType;
+  label: string;
+  stateBinding?: {
+    deviceId: string;
+    interfaceId: string;
+  };
+};
+
+export type LabHint = {
+  id: string;
+  title: string;
+  body: string;
+};
+
+export type LabInterfaceRuntimeState = {
+  id: string;
+  label: string;
+  ipAddress: string | null;
+  subnetMask: string | null;
+  description: string;
+  adminUp: boolean;
+  protocolUp: boolean;
+};
+
+export type LabOspfNetwork = {
+  network: string;
+  wildcard: string;
+  area: string;
+};
+
+export type LabRoutingProcessState = {
+  processId: string;
+  networks: LabOspfNetwork[];
+};
+
+export type LabDeviceRuntimeState = {
+  deviceId: string;
+  hostname: string;
+  type: LabNodeType;
+  interfaces: Record<string, LabInterfaceRuntimeState>;
+  ospfProcesses: Record<string, LabRoutingProcessState>;
+};
+
+export type LabInitialState = {
+  activeDeviceId: string;
+  devices: Record<string, LabDeviceRuntimeState>;
+};
+
+export type LabObjectiveValidation =
+  | {
+      type: 'hostname';
+      deviceId: string;
+      expectedHostname: string;
+    }
+  | {
+      type: 'interface';
+      deviceId: string;
+      interfaceId: string;
+      expected: {
+        description: string;
+        ipAddress: string;
+        subnetMask: string;
+        adminUp: boolean;
+      };
+    }
+  | {
+      type: 'ospf-network';
+      deviceId: string;
+      processId: string;
+      expected: LabOspfNetwork;
+    };
+
+export type LabGuidedAssist = {
+  command: string;
+  explanation: string;
+  objectiveId: string;
+};
+
+export type LabDefinition = {
+  id: string;
   lessonId: string;
   title: string;
+  summary: string;
   scenario: string;
+  topology: {
+    devices: LabTopologyNode[];
+    links: LabTopologyLink[];
+  };
   objectives: LabObjective[];
-  hints: string[];
+  hints: LabHint[];
+  initialState: LabInitialState;
+};
+
+export type LabMetadata = Pick<LabDefinition, 'lessonId' | 'title' | 'summary' | 'scenario' | 'objectives' | 'hints'>;
+
+export type LabObjectiveProgress = {
+  objectiveId: string;
+  isComplete: boolean;
 };
 
 // ---------------------------------------------------------------------------

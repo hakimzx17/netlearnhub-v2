@@ -7,6 +7,7 @@
 - For any lessons-section work, read `docs/buildingLesson.md` first and use it as the reference for the Domains Directory grid, Lesson Detail View, tab flow, centered content framing, and sidebar-safe spacing.
 - The current repo starts from a static `index.html` served by `server.js`, so early tasks focus on establishing the real app foundation.
 - Check off tasks as they are completed and adjust scope only when repo reality forces a change.
+- Update this file in the same working pass whenever tasks or milestone outcomes are completed so the checklist stays aligned with repo reality.
 
 ## Milestone 0: Foundation And App Shell
 **Objective:** Turn the current static prototype into a maintainable React application foundation.
@@ -43,33 +44,33 @@
 **Depends on:** Milestone 0.
 
 ### Tasks
-- [ ] Read `docs/buildingLesson.md` first and lock the two-tier lessons structure before implementation starts.
-- [ ] Define TypeScript models for domain directory cards, module sidebar items, lessons, theory sections, callouts, CLI spotlights, checkpoints, summary cards, simulation metadata, lab metadata, flashcard metadata, and quiz metadata.
-- [ ] Review the lessons information architecture against `docs/PRD.md` and align the flow to Domains Directory -> Lesson Detail View -> Theory / Simulation / Practice Lab / Flash cards / Lesson Quiz.
-- [ ] Build the centered `Lessons Directory` container pattern with max-width, horizontal padding, and spacing that keeps content clear of the app sidebar.
-- [ ] Build the domains grid with large domain cards, progress bars, hover states, active emphasis, and locked-state presentation.
-- [ ] Build the `Lesson Detail View` shell with back-to-domains navigation, domain eyebrow, lesson title, and centered main-content framing.
-- [ ] Build the module sidebar with completed, active, and locked lesson/module states.
-- [ ] Build the tab navigation for Theory, Simulation, Practice Lab, Flash cards, and Lesson Quiz.
-- [ ] Build tab switching logic and transition behavior that matches the `docs/buildingLesson.md` interaction model.
-- [ ] Build the Theory tab surface for deep-dive content with clear continuation actions into the next study step.
-- [ ] Build callout block components for `WHY THIS MATTERS`, `EXAM TRAP`, `REMEMBER THIS`, `REAL WORLD`, and `ANALOGY`.
-- [ ] Build CLI spotlight rendering with code formatting and explanation support.
-- [ ] Build visual block support for inline diagrams and topology illustrations.
-- [ ] Build concept checkpoint interactions with immediate feedback and no grading pressure.
-- [ ] Build summary card rendering and prepare the hook-in point for vault review storage.
-- [ ] Add resume/open-lesson entry points from dashboard and domain surfaces into the new lesson detail view.
-- [ ] Review lesson UI/UX for readability, pacing, scannability, focus states, progress cues, and tab clarity.
-- [ ] Validate theme fidelity across typography, spacing, glass surfaces, emerald accents, contrast, and centered composition.
-- [ ] Implement lesson progress updates for started, resumed, and viewed states.
-- [ ] Connect dashboard widgets to real lesson progress and last-session data.
-- [ ] Add accessibility coverage for keyboard navigation, heading structure, reading flow, and tab interactions.
+- [x] Read `docs/buildingLesson.md` first and lock the two-tier lessons structure before implementation starts.
+- [x] Define TypeScript models for domain directory cards, module sidebar items, lessons, theory sections, callouts, CLI spotlights, checkpoints, summary cards, simulation metadata, lab metadata, flashcard metadata, and quiz metadata.
+- [x] Review the lessons information architecture against `docs/PRD.md` and align the flow to Domains Directory -> Lesson Detail View -> Theory / Simulation / Practice Lab / Flash cards / Lesson Quiz.
+- [x] Build the centered `Lessons Directory` container pattern with max-width, horizontal padding, and spacing that keeps content clear of the app sidebar.
+- [x] Build the domains grid with large domain cards, progress bars, hover states, active emphasis, and locked-state presentation.
+- [x] Build the `Lesson Detail View` shell with back-to-domains navigation, domain eyebrow, lesson title, and centered main-content framing.
+- [x] Build the module sidebar with completed, active, and locked lesson/module states.
+- [x] Build the tab navigation for Theory, Simulation, Practice Lab, Flash cards, and Lesson Quiz.
+- [x] Build tab switching logic and transition behavior that matches the `docs/buildingLesson.md` interaction model.
+- [x] Build the Theory tab surface for deep-dive content with clear continuation actions into the next study step.
+- [x] Build callout block components for `WHY THIS MATTERS`, `EXAM TRAP`, `REMEMBER THIS`, `REAL WORLD`, and `ANALOGY`.
+- [x] Build CLI spotlight rendering with code formatting and explanation support.
+- [x] Build visual block support for inline diagrams and topology illustrations.
+- [x] Build concept checkpoint interactions with immediate feedback and no grading pressure.
+- [x] Build summary card rendering and prepare the hook-in point for vault review storage.
+- [x] Add resume/open-lesson entry points from dashboard and domain surfaces into the new lesson detail view.
+- [x] Review lesson UI/UX for readability, pacing, scannability, focus states, progress cues, and tab clarity.
+- [x] Validate theme fidelity across typography, spacing, glass surfaces, emerald accents, contrast, and centered composition.
+- [x] Implement lesson progress updates for started, resumed, and viewed states.
+- [x] Connect dashboard widgets to real lesson progress and last-session data.
+- [x] Add accessibility coverage for keyboard navigation, heading structure, reading flow, and tab interactions.
 
 ### Done When
-- [ ] A user can open the Domains Directory, choose a domain, open the Lesson Detail View, and move across the five lesson tabs.
-- [ ] Structured lesson data can drive the Lessons Directory and Lesson Detail View without bespoke per-lesson layouts.
-- [ ] Lesson surfaces are UI/UX correct, centered, and visually aligned with `docs/buildingLesson.md` and the PRD theme.
-- [ ] Domain overview and dashboard both reflect real stored lesson progress.
+- [x] A user can open the Domains Directory, choose a domain, open the Lesson Detail View, and move across the five lesson tabs.
+- [x] Structured lesson data can drive the Lessons Directory and Lesson Detail View without bespoke per-lesson layouts.
+- [x] Lesson surfaces are UI/UX correct, centered, and visually aligned with `docs/buildingLesson.md` and the PRD theme.
+- [x] Domain overview and dashboard both reflect real stored lesson progress.
 
 ## Milestone 2: Quiz Engine And Unlock Logic
 **Objective:** Complete the gated progression loop for lesson-quiz tabs and domains.
@@ -77,28 +78,28 @@
 **Depends on:** Milestone 1.
 
 ### Tasks
-- [ ] Define the typed quiz question model for all PRD-supported question types.
-- [ ] Build the quiz state engine for loading questions, tracking answers, and final submission.
-- [ ] Build UI support for single-choice questions.
-- [ ] Build UI support for multi-select questions.
-- [ ] Build UI support for true/false questions.
-- [ ] Build UI support for fill-in-the-blank questions.
-- [ ] Enforce PRD quiz rules: randomized questions, randomized options, no back-navigation, explanations always shown.
-- [ ] Build the quiz progress bar, timing display, and animated answer states.
-- [ ] Build the results screen with score ring, breakdown, and missed-question review actions.
-- [ ] Persist quiz attempts, scores, dates, and missed-question IDs.
-- [ ] Mount the quiz experience into the Lesson Detail View's `Lesson Quiz` tab or its direct launch flow without breaking the tabbed lesson structure.
-- [ ] Implement the pure unlock engine for lessons and domains.
-- [ ] Update progress state when lesson quizzes are passed or failed.
-- [ ] Wire quiz outcomes into next-lesson unlock behavior.
-- [ ] Build domain quiz support and domain completion behavior.
-- [ ] Add review actions that fast-track missed questions back to the correct lesson sections.
-- [ ] Validate the full lesson -> quiz -> unlock loop with representative seeded content.
+- [x] Define the typed quiz question model for all PRD-supported question types.
+- [x] Build the quiz state engine for loading questions, tracking answers, and final submission.
+- [x] Build UI support for single-choice questions.
+- [x] Build UI support for multi-select questions.
+- [x] Build UI support for true/false questions.
+- [x] Build UI support for fill-in-the-blank questions.
+- [x] Enforce PRD quiz rules: randomized questions, randomized options, no back-navigation, explanations always shown.
+- [x] Build the quiz progress bar, timing display, and animated answer states.
+- [x] Build the results screen with score ring, breakdown, and missed-question review actions.
+- [x] Persist quiz attempts, scores, dates, and missed-question IDs.
+- [x] Mount the quiz experience into the Lesson Detail View's `Lesson Quiz` tab or its direct launch flow without breaking the tabbed lesson structure.
+- [x] Implement the pure unlock engine for lessons and domains.
+- [x] Update progress state when lesson quizzes are passed or failed.
+- [x] Wire quiz outcomes into next-lesson unlock behavior.
+- [x] Build domain quiz support and domain completion behavior.
+- [x] Add review actions that fast-track missed questions back to the correct lesson sections.
+- [x] Validate the full lesson -> quiz -> unlock loop with representative seeded content.
 
 ### Done When
-- [ ] A user can open the `Lesson Quiz` tab, pass a lesson quiz, and unlock the next lesson.
-- [ ] Domain completion status updates correctly after the domain quiz.
-- [ ] Quiz history survives refresh and return visits.
+- [x] A user can open the `Lesson Quiz` tab, pass a lesson quiz, and unlock the next lesson.
+- [x] Domain completion status updates correctly after the domain quiz.
+- [x] Quiz history survives refresh and return visits.
 
 ## Milestone 3: Simulation Platform
 **Objective:** Build the shared simulation platform that lesson-specific simulations will use inside the lesson-detail experience.
@@ -106,22 +107,22 @@
 **Depends on:** Milestones 0 through 2.
 
 ### Tasks
-- [ ] Define the shared simulation contract for lesson-specific simulation components.
-- [ ] Build the `Simulation` tab surface or entry state used by the Lesson Detail View.
-- [ ] Build the shared simulation shell with play, pause, step-through, speed control, and caption panel.
-- [ ] Add simulation state tracking so progress can reflect whether the sim was viewed.
-- [ ] Build desktop-only guard behavior for simulation routes.
-- [ ] Implement reduced-motion behavior where motion is minimized but content remains understandable.
-- [ ] Build one reference simulation that proves the shell, labels, caption updates, and progression hooks.
-- [ ] Ensure the shared simulation patterns support clear visual state mapping and instructional captions.
-- [ ] Connect lesson flow into simulation routes and back out to lab or quiz progression.
-- [ ] Validate layout stability and theme fidelity so simulations do not break page structure.
-- [ ] Run content and UX review to confirm the simulation platform teaches concepts rather than acting as decoration.
+- [x] Define the shared simulation contract for lesson-specific simulation components.
+- [x] Build the `Simulation` tab surface or entry state used by the Lesson Detail View.
+- [x] Build the shared simulation shell with play, pause, step-through, speed control, and caption panel.
+- [x] Add simulation state tracking so progress can reflect whether the sim was viewed.
+- [x] Build desktop-only guard behavior for simulation routes.
+- [x] Implement reduced-motion behavior where motion is minimized but content remains understandable.
+- [x] Build one reference simulation that proves the shell, labels, caption updates, and progression hooks.
+- [x] Ensure the shared simulation patterns support clear visual state mapping and instructional captions.
+- [x] Connect lesson flow into simulation routes and back out to lab or quiz progression.
+- [x] Validate layout stability and theme fidelity so simulations do not break page structure.
+- [x] Run content and UX review to confirm the simulation platform teaches concepts rather than acting as decoration.
 
 ### Done When
-- [ ] Shared simulation infrastructure can support bespoke lesson-specific simulations.
-- [ ] Simulation routes respect desktop-only constraints.
-- [ ] Simulation completion fits into the lesson-detail progression experience.
+- [x] Shared simulation infrastructure can support bespoke lesson-specific simulations.
+- [x] Simulation routes respect desktop-only constraints.
+- [x] Simulation completion fits into the lesson-detail progression experience.
 
 ## Milestone 4: Hands-On Lab Platform
 **Objective:** Deliver the shared CLI-based lab platform and prove it with a deterministic reference lab launched from the lesson-detail experience.
@@ -129,31 +130,31 @@
 **Depends on:** Milestones 0 through 3.
 
 ### Tasks
-- [ ] Define the lab content model for topology, objectives, hints, initial state, and validation.
-- [ ] Build the `Practice Lab` tab surface with lab overview, launch CTA, and supporting actions that match `docs/buildingLesson.md`.
-- [ ] Build the lab shell with topology panel, terminal panel, and lab brief/objectives area.
-- [ ] Build the CLI prompt and mode-switching state machine.
-- [ ] Support IOS-style mode transitions such as `enable`, `configure terminal`, interface config, and router config modes.
-- [ ] Add command history navigation.
-- [ ] Add tab completion for known commands.
-- [ ] Add contextual `?` help support.
-- [ ] Add deterministic unknown-command and typo feedback.
-- [ ] Support abbreviated command forms defined in the PRD.
-- [ ] Build formatted output rendering for key `show` commands.
-- [ ] Build the topology renderer for routers, switches, PCs, servers, firewall, cloud nodes, and link types.
-- [ ] Build the validation engine against expected configuration state.
-- [ ] Build objective completion tracking.
-- [ ] Add guided mode with next-command assistance.
-- [ ] Add hint toggling that does not penalize progress.
-- [ ] Add full lab reset behavior.
-- [ ] Build one reference lab scenario to validate the engine end to end.
-- [ ] Connect lab completion to lesson progress state.
-- [ ] Test lab determinism so repeated command sequences produce consistent outcomes.
+- [x] Define the lab content model for topology, objectives, hints, initial state, and validation.
+- [x] Build the `Practice Lab` tab surface with lab overview, launch CTA, and supporting actions that match `docs/buildingLesson.md`.
+- [x] Build the lab shell with topology panel, terminal panel, and lab brief/objectives area.
+- [x] Build the CLI prompt and mode-switching state machine.
+- [x] Support IOS-style mode transitions such as `enable`, `configure terminal`, interface config, and router config modes.
+- [x] Add command history navigation.
+- [x] Add tab completion for known commands.
+- [x] Add contextual `?` help support.
+- [x] Add deterministic unknown-command and typo feedback.
+- [x] Support abbreviated command forms defined in the PRD.
+- [x] Build formatted output rendering for key `show` commands.
+- [x] Build the topology renderer for routers, switches, PCs, servers, firewall, cloud nodes, and link types.
+- [x] Build the validation engine against expected configuration state.
+- [x] Build objective completion tracking.
+- [x] Add guided mode with next-command assistance.
+- [x] Add hint toggling that does not penalize progress.
+- [x] Add full lab reset behavior.
+- [x] Build one reference lab scenario to validate the engine end to end.
+- [x] Connect lab completion to lesson progress state.
+- [x] Test lab determinism so repeated command sequences produce consistent outcomes.
 
 ### Done When
-- [ ] A user can complete a guided reference lab and see objectives update correctly.
-- [ ] CLI, topology, and validation state remain synchronized.
-- [ ] Labs can be launched from the `Practice Lab` tab and reset safely without corrupting progress.
+- [x] A user can complete a guided reference lab and see objectives update correctly.
+- [x] CLI, topology, and validation state remain synchronized.
+- [x] Labs can be launched from the `Practice Lab` tab and reset safely without corrupting progress.
 
 ## Milestone 5: Flashcards And Vault Platform
 **Objective:** Deliver the review systems that remain available outside the gated lesson loop while also supporting lesson-linked flashcard entry from the lesson-detail view.
@@ -195,6 +196,7 @@
 - [ ] Re-read `docs/buildingLesson.md` before implementing Domain 1 lesson surfaces so the layout, tab structure, and centered composition stay aligned.
 - [ ] Write all Domain 1 lesson theory modules as deep-dive structured content.
 - [ ] Add callouts, CLI spotlights, visual blocks, concept checkpoints, and summary cards for every Domain 1 lesson.
+- [ ] Make sure to follow the first theory lesson stracture, fetures, UI/UX, font size, Cards, Colors.
 - [ ] Review every Domain 1 lesson for UI/UX correctness, readability, pacing, and theme correctness inside the reader.
 - [ ] Build a bespoke simulation for every Domain 1 lesson.
 - [ ] Build a dedicated practice lab for every Domain 1 lesson.

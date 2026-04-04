@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { ClipboardList, FlaskConical, Layers } from 'lucide-react';
+import { ClipboardList, Layers } from 'lucide-react';
 
 import { TheoryTab } from './TheoryTab';
+import { LabTabSurface } from '../lab/LabTabSurface';
 import { SimulationTabSurface } from '../simulation/SimulationTabSurface';
 import { QuizShell } from '../quiz/QuizShell';
 import { getLessonQuiz } from '../../content/quizzes';
@@ -37,13 +38,7 @@ export function LessonTabContent({ activeTab, lesson, lessonId }: LessonTabConte
           <SimulationTabSurface lessonId={lessonId} lessonTitle={lesson.title} />
         )}
         {activeTab === 'lab' && (
-          <div className="tab-placeholder">
-            <div className="tab-placeholder__icon"><FlaskConical size={32} /></div>
-            <h2 className="tab-placeholder__title">Practice Lab</h2>
-            <p className="tab-placeholder__description">
-              A hands-on CLI lab for this lesson will appear here. Labs require a desktop browser and provide a near-real terminal experience.
-            </p>
-          </div>
+          <LabTabSurface lessonId={lessonId} lessonTitle={lesson.title} />
         )}
         {activeTab === 'flashcards' && (
           <div className="tab-placeholder">
