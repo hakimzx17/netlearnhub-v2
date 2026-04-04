@@ -13,11 +13,13 @@ Read it before making changes.
 
 ## Repo Reality
 - The checked-in app now boots through Vite and renders from `src/main.tsx`.
+- The git repository root is currently above this project at `C:\Users\Admin\Documents`, while the product code for this app lives in `Projects/netlearnhub-v2`.
 - `src/` now contains the app shell, dashboard, real lesson UI, quiz engine, simulation platform, lab platform, persisted stores, authored sample content, and frontend tests.
 - The current UI is React + TypeScript with CSS variables in `src/styles.css`.
 - React Router now includes the lesson-detail experience plus real lesson quiz, simulation, and lab flows; later-product areas such as flashcards, vault, exam mode, and broader curriculum content are still ahead of the repo.
 - Zustand persistence is in place for guest profile and progress state, including quiz, simulation, and lab progression.
 - `.github/workflows/` includes the GitHub Pages deployment workflow for the hosted demo.
+- The public GitHub repo for this project is expected to publish the `Projects/netlearnhub-v2` subtree as the repo root on GitHub, not the parent `Documents` repo layout.
 - `project-specs/` now exists and stores milestone setup specs used during implementation.
 - Milestones 1 through 4 are implemented in repo reality; later milestones remain partially or fully aspirational.
 - There is no Prettier config.
@@ -160,4 +162,6 @@ Read it before making changes.
 - Verify commands honestly.
 - Call out placeholder routes and incomplete milestone work instead of pretending features exist.
 - Keep `docs/tasks.md` checkboxes synchronized with completed work instead of leaving finished milestones unchecked.
+- Be careful when pushing this project to standalone remotes: the local git root is broader than the app folder, so project-only remotes need the `Projects/netlearnhub-v2` subtree rather than the whole parent repo.
+- The current GitHub Pages environment accepts deployment from `master`; if a `main` deployment is rejected by environment protection rules, either mirror the deployment commit to `master` or update the repo Pages/environment settings before assuming the site is broken.
 - When you add new repo conventions, codify them in `AGENTS.md`.
