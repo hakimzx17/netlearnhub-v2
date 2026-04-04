@@ -32,4 +32,20 @@ describe('DomainPage', () => {
     expect(screen.getByRole('button', { name: /expand network access/i })).toHaveAttribute('aria-expanded', 'false');
     expect(screen.queryByRole('link', { name: /resume module/i })).not.toBeInTheDocument();
   });
+
+  it('keeps later domains locked until the previous domain is completed', () => {
+    render(
+      <MemoryRouter initialEntries={['/domain']}> 
+        <Routes>
+          <Route element={<DomainPage />} path="/domain" />
+          <Route element={<DomainPage />} path="/domain/:id" />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /expand ip connectivity/i }));
+
+    expect(screen.getByText(/complete network access to unlock this domain path/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /locked until domain 2/i })).toBeDisabled();
+  });
 });

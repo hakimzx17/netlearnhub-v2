@@ -7,7 +7,11 @@ import type { DomainId } from '../content/domains';
 import { useProgressStore } from '../store/progressStore';
 import type { DomainStatus } from '../store/progressStore';
 
-function getDomainStatusLabel(status: DomainStatus): string {
+function getDomainStatusLabel(status: DomainStatus, isLocked: boolean): string {
+  if (isLocked) {
+    return 'Locked';
+  }
+
   if (status === 'complete') {
     return 'Completed';
   }
@@ -19,7 +23,11 @@ function getDomainStatusLabel(status: DomainStatus): string {
   return 'Ready to Start';
 }
 
-function getDomainActionLabel(status: DomainStatus): string {
+function getDomainActionLabel(status: DomainStatus, isLocked: boolean): string {
+  if (isLocked) {
+    return 'Locked';
+  }
+
   if (status === 'complete') {
     return 'Review Module';
   }
@@ -31,10 +39,11 @@ function getDomainActionLabel(status: DomainStatus): string {
   return 'Start Module';
 }
 
-function getDomainItemClass(status: DomainStatus, isActive: boolean): string {
+function getDomainItemClass(status: DomainStatus, isActive: boolean, isLocked: boolean): string {
   return [
     'course-map-item',
     isActive ? 'course-map-item--active' : '',
+    isLocked ? 'course-map-item--locked' : '',
     status === 'complete' ? 'course-map-item--complete' : '',
     status === 'in-progress' ? 'course-map-item--progress' : '',
     status === 'not-started' ? 'course-map-item--pending' : '',
@@ -43,9 +52,10 @@ function getDomainItemClass(status: DomainStatus, isActive: boolean): string {
     .join(' ');
 }
 
-function getStatusPillClass(status: DomainStatus): string {
+function getStatusPillClass(status: DomainStatus, isLocked: boolean): string {
   return [
     'course-map-card__status-pill',
+    isLocked ? 'course-map-card__status-pill--locked' : '',
     status === 'complete' ? 'course-map-card__status-pill--complete' : '',
     status === 'in-progress' ? 'course-map-card__status-pill--progress' : '',
     status === 'not-started' ? 'course-map-card__status-pill--pending' : '',
@@ -54,7 +64,11 @@ function getStatusPillClass(status: DomainStatus): string {
     .join(' ');
 }
 
-function getStatusIcon(status: DomainStatus) {
+function getStatusIcon(status: DomainStatus, isLocked: boolean) {
+  if (isLocked) {
+    return <Lock size={14} />;
+  }
+
   if (status === 'complete') {
     return <Check size={14} />;
   }
@@ -108,7 +122,7 @@ export function DomainPage() {
       </header>
 
       <div className="course-map-list">
-        {domains.map((domain) => {
+        {domains.map((domain, index) => {
           const progress =
             domainProgress[domain.id] ??
             {
@@ -120,8 +134,11 @@ export function DomainPage() {
           const lessons = getDomainLessonPreviews(domain.id);
           const resumeLessonId = getResumeLessonId(domain.id, lessonProgress);
           const resumeLesson = lessons.find((lesson) => lesson.id === resumeLessonId) ?? lessons[0];
+          const entryLessonStatus = lessons[0] ? lessonProgress[lessons[0].id]?.status : 'locked';
+          const isLocked = entryLessonStatus === 'locked' && progress.status === 'not-started';
+          const previousDomain = index > 0 ? domains[index - 1] : null;
           const isActive = domain.id === activeDomainId;
-          const progressWidth = Math.max(progress.completionPercent, progress.status === 'complete' ? 100 : 6);
+          const progressWidth = isLocked ? 0 : Math.max(progress.completionPercent, progress.status === 'complete' ? 100 : 6);
           const detailsClassName = [
             'course-map-card__details',
             isActive ? 'course-map-card__details--open' : '',
@@ -130,7 +147,7 @@ export function DomainPage() {
             .join(' ');
 
           return (
-            <div className={getDomainItemClass(progress.status, isActive)} key={domain.id}>
+            <div className={getDomainItemClass(progress.status, isActive, isLocked)} key={domain.id}>
               <div aria-hidden="true" className="course-map-item__rail">
                 <span className="course-map-item__node" />
                   <svg className="course-map-item__connector" viewBox="0 0 140 100">
@@ -177,9 +194,9 @@ export function DomainPage() {
                     <div className="course-map-card__details-inner">
                       <div className="course-map-card__status-row">
                         <span>Status</span>
-                        <span className={getStatusPillClass(progress.status)}>
-                          {getStatusIcon(progress.status)}
-                          {getDomainStatusLabel(progress.status)}
+                        <span className={getStatusPillClass(progress.status, isLocked)}>
+                          {getStatusIcon(progress.status, isLocked)}
+                          {getDomainStatusLabel(progress.status, isLocked)}
                         </span>
                       </div>
 
@@ -214,14 +231,26 @@ export function DomainPage() {
                         ))}
                       </ul>
 
+                      {isLocked && previousDomain ? (
+                        <p className="course-map-card__lock-note">
+                          Complete {previousDomain.title} to unlock this domain path.
+                        </p>
+                      ) : null}
+
                       <div className="course-map-card__actions">
-                        <Link
-                          className="course-map-card__action"
-                          tabIndex={isActive ? 0 : -1}
-                          to={`/lesson/${resumeLesson.id}`}
-                        >
-                          {getDomainActionLabel(progress.status)} <ArrowRight size={16} />
-                        </Link>
+                        {isLocked ? (
+                          <button className="course-map-card__action course-map-card__action--locked" disabled type="button">
+                            Locked until Domain {previousDomain?.index}
+                          </button>
+                        ) : (
+                          <Link
+                            className="course-map-card__action"
+                            tabIndex={isActive ? 0 : -1}
+                            to={`/lesson/${resumeLesson.id}`}
+                          >
+                            {getDomainActionLabel(progress.status, isLocked)} <ArrowRight size={16} />
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </div>

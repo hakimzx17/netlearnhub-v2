@@ -52,14 +52,23 @@ export function TheoryTab({ lesson, lessonId }: TheoryTabProps) {
         </CalloutBlock>
       ))}
 
-      {lesson.cliSpotlights.map((cli) => (
-        <CLISpotlight
-          key={cli.id}
-          title={cli.title}
-          commands={cli.commands}
-          explanation={cli.explanation}
-        />
-      ))}
+      {lesson.cliSpotlights.length > 0 && (
+        <section className="theory-section" aria-label="CLI Commands">
+          <div className="theory-section__header">
+            <h2 className="theory-section__heading">CLI Commands</h2>
+          </div>
+          <div className="theory-cli-list">
+            {lesson.cliSpotlights.map((cli) => (
+              <CLISpotlight
+                key={cli.id}
+                title={cli.title}
+                commands={cli.commands}
+                explanation={cli.explanation}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {lesson.visualBlocks.map((block) => (
         <VisualBlock

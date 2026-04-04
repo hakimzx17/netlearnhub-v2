@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { BookOpen, ClipboardList, FlaskConical, Layers, PlayCircle } from 'lucide-react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 
-import { getDomainById, getDomainLessonPreviews } from '../content/domains';
+import { getDomainById, getDomainLessonPreviews, getLessonPreviewById } from '../content/domains';
 import { getLessonById } from '../content/lessons';
 import type { LessonPreview } from '../content/domains';
 import type { LessonProgress } from '../store/progressStore';
@@ -35,12 +35,14 @@ export function LessonDetailPage() {
   const { id = '' } = useParams<{ id: string }>();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const lessonPreview = getLessonPreviewById(id);
   const lesson = getLessonById(id);
   const lessonProgress = useProgressStore((state: { lessons: Record<string, LessonProgress> }) => state.lessons);
   const markLessonAccessed = useProgressStore((state: { markLessonAccessed: (id: string) => void }) => state.markLessonAccessed);
 
-  const domain = lesson ? getDomainById(lesson.domainId) : null;
+  const domain = lesson ? getDomainById(lesson.domainId) : lessonPreview ? getDomainById(lessonPreview.domainId) : null;
   const domainLessons: LessonPreview[] = lesson ? getDomainLessonPreviews(lesson.domainId) : [];
+  const currentLessonProgress = lessonProgress[id];
 
   const sidebarItems: ModuleSidebarItem[] = domainLessons.map((preview: LessonPreview, index: number) => ({
     id: preview.id,
@@ -69,8 +71,40 @@ export function LessonDetailPage() {
 
   // Mark lesson as accessed when the page loads
   useEffect(() => {
-    if (id) markLessonAccessed(id);
-  }, [id, markLessonAccessed]);
+    if (id && currentLessonProgress?.status !== 'locked') markLessonAccessed(id);
+  }, [currentLessonProgress?.status, id, markLessonAccessed]);
+
+  if (!lessonPreview) {
+    return (
+      <section className="page page--narrow">
+        <header className="page-header">
+          <p className="page-header__eyebrow">Lesson not found</p>
+          <h1>Lesson Not Found</h1>
+          <p className="page-header__description">
+            The lesson you are looking for does not exist yet. Structured lesson content is being added progressively.
+          </p>
+          <Link className="button button--primary" to="/domains">Back to Domains</Link>
+        </header>
+      </section>
+    );
+  }
+
+  if (currentLessonProgress?.status === 'locked') {
+    return (
+      <section className="page page--narrow">
+        <header className="page-header">
+          <p className="page-header__eyebrow">Lesson locked</p>
+          <h1>{lessonPreview.title} is still locked</h1>
+          <p className="page-header__description">
+            Complete the previous lesson sequence or finish the earlier domain path to unlock this lesson.
+          </p>
+          <Link className="button button--primary" to="/domains">
+            Back to Domains
+          </Link>
+        </header>
+      </section>
+    );
+  }
 
   if (!lesson || !domain) {
     return (

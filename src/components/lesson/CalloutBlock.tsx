@@ -1,3 +1,4 @@
+import { ChevronDown } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import type { CalloutType } from '../../content/types';
@@ -18,12 +19,20 @@ type CalloutBlockProps = {
 
 export function CalloutBlock({ type, title, children }: CalloutBlockProps) {
   const config = CALLOUT_CONFIG[type];
+  const heading = title || config.label;
 
   return (
-    <div className={`callout callout--${type}`} role="note">
-      <span className="callout__icon">{config.icon} {config.label}</span>
-      {title && <h3 className="callout__title">{title}</h3>}
-      <p className="callout__body">{children}</p>
-    </div>
+    <details className={`callout callout--${type}`}>
+      <summary className="callout__summary">
+        <span className="callout__summary-copy">
+          <span className="callout__icon" aria-hidden="true">{config.icon}</span>
+          <span className="callout__title">{heading}</span>
+        </span>
+        <ChevronDown className="callout__chevron" size={18} aria-hidden="true" />
+      </summary>
+      <div className="callout__content">
+        <p className="callout__body">{children}</p>
+      </div>
+    </details>
   );
 }

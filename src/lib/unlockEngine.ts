@@ -1,11 +1,25 @@
 import type { DomainId } from '../content/domains';
-import { getDomainLessonPreviews } from '../content/domains';
+import { domains, getDomainLessonPreviews } from '../content/domains';
 import type { LessonProgress } from '../store/progressStore';
 
 export type UnlockResult = {
   lessonUpdates: Record<string, Partial<LessonProgress>>;
   domainUpdates: Record<string, { status?: string; completionPercent?: number; completedLessons?: number }>;
 };
+
+function isDomainComplete(lessons: Record<string, LessonProgress>, domainId: DomainId): boolean {
+  return getDomainLessonPreviews(domainId).every((lesson) => lessons[lesson.id]?.status === 'passed');
+}
+
+function getNextDomainId(domainId: DomainId): DomainId | null {
+  const currentIndex = domains.findIndex((domain) => domain.id === domainId);
+
+  if (currentIndex < 0 || currentIndex >= domains.length - 1) {
+    return null;
+  }
+
+  return domains[currentIndex + 1].id;
+}
 
 // ---------------------------------------------------------------------------
 // Pure unlock computation
@@ -16,9 +30,14 @@ export function computeUnlockState(
   lessonIndex: number,
   domainId: DomainId,
 ): boolean {
-  // First lesson in any domain is always unlocked
   if (lessonIndex === 0) {
-    return true;
+    const currentDomainIndex = domains.findIndex((domain) => domain.id === domainId);
+
+    if (currentDomainIndex <= 0) {
+      return true;
+    }
+
+    return isDomainComplete(lessons, domains[currentDomainIndex - 1].id);
   }
 
   const domainLessons = getDomainLessonPreviews(domainId);
@@ -83,6 +102,17 @@ export function computePostQuizUnlocks(
         completionPercent: 100,
         completedLessons: domainLessons.length,
       };
+
+      const nextDomainId = getNextDomainId(domainId);
+      const nextDomainFirstLesson = nextDomainId ? getDomainLessonPreviews(nextDomainId)[0] : undefined;
+
+      if (nextDomainFirstLesson && lessons[nextDomainFirstLesson.id]?.status === 'locked') {
+        lessonUpdates[nextDomainFirstLesson.id] = {
+          ...lessonUpdates[nextDomainFirstLesson.id],
+          status: 'available',
+          progressPercent: 0,
+        };
+      }
     }
   }
 
