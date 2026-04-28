@@ -162,29 +162,29 @@
 **Depends on:** Milestone 0 for base architecture. Lesson progression integration benefits from Milestones 1 and 2.
 
 ### Tasks
-- [ ] Define the flashcard state model and deck content model.
-- [ ] Implement the simplified SM-2 scheduling logic from the PRD.
-- [ ] Build the flashcard store and persist card progress locally.
-- [ ] Build the flashcard deck picker.
-- [ ] Build the active flashcard session view.
-- [ ] Build the lesson-linked `Flash cards` tab entry surface used by the Lesson Detail View.
-- [ ] Build card flip interaction and difficulty rating controls.
-- [ ] Add session stats and due-card handling.
-- [ ] Add keyboard shortcuts for flip and rating.
-- [ ] Add support for optional diagram and CLI-backed cards.
-- [ ] Define the vault content model.
-- [ ] Build the vault layout with category navigation and content area.
-- [ ] Build client-side search across vault content.
-- [ ] Add bookmark persistence and a personal saved-items view.
-- [ ] Build category pages for must-know facts, OSI/TCP-IP, CLI reference, protocol facts, glossary, and exam traps.
-- [ ] Add links between vault items and related lesson content.
+- [x] Define the flashcard state model and deck content model.
+- [x] Implement the simplified SM-2 scheduling logic from the PRD.
+- [x] Build the flashcard store and persist card progress locally.
+- [x] Build the flashcard deck picker.
+- [x] Build the active flashcard session view.
+- [x] Build the lesson-linked `Flash cards` tab entry surface used by the Lesson Detail View.
+- [x] Build card flip interaction and difficulty rating controls.
+- [x] Add session stats and due-card handling.
+- [x] Add keyboard shortcuts for flip and rating.
+- [x] Add support for optional diagram and CLI-backed cards.
+- [x] Define the vault content model.
+- [x] Build the vault layout with category navigation and content area.
+- [x] Build client-side search across vault content.
+- [x] Add bookmark persistence and a personal saved-items view.
+- [x] Build category pages for must-know facts, OSI/TCP-IP, CLI reference, protocol facts, glossary, and exam traps.
+- [x] Add links between vault items and related lesson content.
 - [ ] Add the soft "study before quiz" nudge where appropriate.
-- [ ] Seed representative sample content to validate both review systems before full curriculum authoring.
+- [x] Seed representative sample content to validate both review systems before full curriculum authoring.
 
 ### Done When
-- [ ] Users can study due cards from flashcard mode and from lesson-linked `Flash cards` entry points.
-- [ ] Vault content is searchable, bookmarkable, and accessible outside lesson progression.
-- [ ] Flashcards and vault both use stable local persistence.
+- [x] Users can study due cards from flashcard mode and from lesson-linked `Flash cards` entry points.
+- [x] Vault content is searchable, bookmarkable, and accessible outside lesson progression.
+- [x] Flashcards and vault both use stable local persistence.
 
 ## Milestone 6: Domain 1 Content Package - Network Fundamentals
 **Objective:** Write and polish the full Domain 1 learning package across theory, simulations, practice labs, flash cards, and lesson quizzes.

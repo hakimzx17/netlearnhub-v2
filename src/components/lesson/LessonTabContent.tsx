@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from 'motion/react';
-import { ClipboardList, Layers } from 'lucide-react';
+import { ClipboardList } from 'lucide-react';
 
 import { TheoryTab } from './TheoryTab';
 import { LabTabSurface } from '../lab/LabTabSurface';
 import { SimulationTabSurface } from '../simulation/SimulationTabSurface';
 import { QuizShell } from '../quiz/QuizShell';
+import { LessonFlashcardTab } from './LessonFlashcardTab';
 import { getLessonQuiz } from '../../content/quizzes';
 import type { LessonDefinition } from '../../content/types';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
@@ -41,13 +42,7 @@ export function LessonTabContent({ activeTab, lesson, lessonId }: LessonTabConte
           <LabTabSurface lessonId={lessonId} lessonTitle={lesson.title} />
         )}
         {activeTab === 'flashcards' && (
-          <div className="tab-placeholder">
-            <div className="tab-placeholder__icon"><Layers size={32} /></div>
-            <h2 className="tab-placeholder__title">Flash Cards</h2>
-            <p className="tab-placeholder__description">
-              Lesson-linked flashcard review will appear here. Cards are drawn from the domain deck and scheduled using spaced repetition.
-            </p>
-          </div>
+          <LessonFlashcardTab lessonId={lessonId} domainId={lesson.domainId} />
         )}
         {activeTab === 'quiz' && (
           quizQuestions.length > 0 ? (
