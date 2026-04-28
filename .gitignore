@@ -2,8 +2,6 @@ node_modules/
 build/
 dist/
 coverage/
-.codex/
-.opencode/
 .DS_Store
 *.log
 .env*

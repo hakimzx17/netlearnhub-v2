@@ -1,10 +1,6 @@
 import { useParams } from 'react-router-dom';
 
 import { RoutePlaceholderPage } from './RoutePlaceholderPage';
-import { FlashcardDeckPicker } from '../components/flashcard/FlashcardDeckPicker';
-import { FlashcardSession } from '../components/flashcard/FlashcardSession';
-import { VaultHome } from '../components/vault/VaultHome';
-import { VaultCategory } from '../components/vault/VaultCategory';
 
 export function SimulationPage() {
   const { id = 'lesson' } = useParams();
@@ -45,19 +41,75 @@ export function DomainQuizPage() {
 }
 
 export function VaultPage() {
-  return <VaultHome />;
+  return (
+    <RoutePlaceholderPage
+      actionLabel="Open CLI reference"
+      actionTo="/vault/cli-reference"
+      checklist={[
+        'Vault landing page route is active.',
+        'Category routes are already nested and navigable.',
+        'Search, bookmarks, and authored reference content land in Milestone 5.',
+      ]}
+      description="The permanent reference layer is mapped into the app now so navigation and layout are stable before content authoring begins."
+      eyebrow="Vault route"
+      title="Vault home placeholder"
+    />
+  );
 }
 
 export function VaultCategoryPage() {
-  return <VaultCategory />;
+  const { category = 'category' } = useParams();
+
+  return (
+    <RoutePlaceholderPage
+      actionLabel="Back to Vault"
+      actionTo="/vault"
+      checklist={[
+        `Category slug detected: ${category}`,
+        'Fuzzy search and bookmark persistence land in Milestone 5.',
+        'The route already supports deep-linking from lessons and quick actions.',
+      ]}
+      description="Each vault category has a stable URL now, which makes future content linking straightforward."
+      eyebrow="Vault category route"
+      title="Vault category placeholder"
+    />
+  );
 }
 
 export function FlashcardsPage() {
-  return <FlashcardDeckPicker />;
+  return (
+    <RoutePlaceholderPage
+      actionLabel="Open a deck placeholder"
+      actionTo="/flashcards/domain-2"
+      checklist={[
+        'Flashcard deck picker route is active.',
+        'Session flow and SM-2 scheduling land in Milestone 5.',
+        'Dashboard quick actions already point into the system.',
+      ]}
+      description="The review systems stay always accessible in the PRD, so their routes are available from Milestone 0 onward."
+      eyebrow="Flashcards route"
+      title="Flashcard deck picker placeholder"
+    />
+  );
 }
 
 export function FlashcardSessionPage() {
-  return <FlashcardSession />;
+  const { domainId = 'domain-1' } = useParams();
+
+  return (
+    <RoutePlaceholderPage
+      actionLabel="Back to decks"
+      actionTo="/flashcards"
+      checklist={[
+        `Deck scope detected: ${domainId}`,
+        'The active study session shell lands in Milestone 5.',
+        'Persistent progress storage is already available for card state.',
+      ]}
+      description="Each deck already has a route target so the future review engine can plug in without rewiring navigation."
+      eyebrow="Flashcard session route"
+      title="Flashcard session placeholder"
+    />
+  );
 }
 
 export function ExamPage() {
